@@ -1,0 +1,32 @@
+{
+  "name": "moc-vr",
+  "version": "0.1.0",
+  "author": "Thomas Powell <thomas.powell@informaticslab.co.uk>",
+  "description": "MOC VR app",
+  "dependencies": {
+    "aws-sdk": "^2.9.0",
+    "connect-busboy": "0.0.2",
+    "fs-extra": "^0.22.1",
+    "node-uuid": "^1.4.7",
+    "streamifier": "^0.1.1"
+  },
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "keywords": [
+    "express",
+    "file-upload",
+    "upload",
+    "forms",
+    "multipart",
+    "files",
+    "connect-busboy",
+    "middleware"
+  ],
+  "devDependencies": {
+    "express": "^4.13.4"
+  },
+  "scripts": {
+    "start": "node src/server"
+  }
+}
