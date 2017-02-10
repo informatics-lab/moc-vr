@@ -20,7 +20,6 @@ var bucket = "moc-vr";
 
 app.use(fileUpload());
 
-console.log("DIR",__dirname);
 app.use(express.static(__dirname + "/public"));
 
 app.get("/id/:id", function (req, res) {
