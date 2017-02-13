@@ -198,6 +198,6 @@ app.post("/post", function (req, res) {
 
 });
 
-app.listen(8000, function () {
-    console.log("Express server listening on port 8000");
+app.listen(3000, function () {
+    console.log("Express server listening on port 3000");
 });
