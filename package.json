@@ -1,6 +1,6 @@
 {
   "name": "moc-vr",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Thomas Powell <thomas.powell@informaticslab.co.uk>",
   "description": "MOC VR app",
   "dependencies": {
