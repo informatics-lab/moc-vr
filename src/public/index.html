@@ -57,6 +57,22 @@
             <!-- A wrapper for all the blog posts -->
             <div id="results" class="posts">
 
+              <script id="photosphere_result" type="text/x-dot-template">
+                  <h1 class="content-subhead">Latest Photosphere Ob</h1>
+                  <div class="post">
+                      <p class="post-meta">
+                          Observed {{=it.date}} tagged as:
+                          {{~it.tags :value:index}}
+                              <a class="post-category" href="#">{{=value}}!</a>
+                          {{~}}
+                      </p>
+                      <br />
+                      <a-scene class="pure-u-1" embedded>
+                          <a-sky src="{{=it.photosphere_url}}" rotation="0 -130 0"></a-sky>
+                      </a-scene>
+                  </div>
+              </script>
+
 
 
 
@@ -65,7 +81,8 @@
         </div>
     </div>
 </div>
-
+<script src="https://aframe.io/releases/0.4.0/aframe.min.js"></script>
+<script src="js/doT.min.js"></script>
 <script src="js/index.js"></script>
 
 </body>

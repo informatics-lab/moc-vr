@@ -25,46 +25,21 @@ window.onload = function () {
 //         })
 //
 // }
-
+render_photosphere_result = doT.template(document.getElementById('photosphere_result').text);
 function getId(id) {
     fetch("/id/" + id)
         .then(function (res) {
             return res.json();
         })
         .then(function (json) {
-            var p = json.Items[0];
-            var resultsDom = document.getElementById("results");
-
-            var header = document.createElement("h1");
-            header.setAttribute("class", "content-subhead");
-            header.innerText = "Latest Photosphere Ob";
-            resultsDom.appendChild(header);
-
+            var result = json.Items[0];
             var container = document.createElement("div");
-            container.setAttribute("class", "post");
-            resultsDom.appendChild(container);
-
-            var meta = document.createElement("p");
-            meta.setAttribute("class", "post-meta");
-            var metaHtml = "Observed "+ new Date(p.dateTime.S).toDateString()+ " tagged as: ";
-            p.tags.SS.forEach(function(tag){
-                metaHtml = metaHtml + "<a class=\"post-category\" href=\"#\">" + tag + "</a> ";
+            container.innerHTML = render_photosphere_result({
+              date:new Date(result.dateTime.S).toDateString(),
+              tags:result.tags.SS,
+              photosphere_url:result.photosphere.S
             });
-            meta.innerHTML = metaHtml;
-            container.appendChild(meta);
-
-            var br = document.createElement("br");
-            container.appendChild(br);
-
-            var photosphere = document.createElement("img");
-            photosphere.setAttribute("src", p.photosphere.S);
-            photosphere.setAttribute("class", "pure-u-1");
-            container.appendChild(photosphere);
-
-
-
-            console.log(p);
-
+            document.getElementById("results").appendChild(container)
             return;
         })
 }
