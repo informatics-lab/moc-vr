@@ -23,7 +23,7 @@ app.use(fileUpload());
 app.use(express.static(__dirname + "/public"));
 
 app.get("/by_tag/:tag", function (req, res) {
-  var tag = req.params.tag
+  var tag = req.params.tag.trim().toLowerCase()
 
   function findByTag(tag, limit) {
       limit = limit || 5 ;
