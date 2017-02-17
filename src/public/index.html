@@ -46,13 +46,13 @@
 
     <div class="content pure-u-1 pure-u-md-3-4">
         <div>
-            <!--<div class="posts">-->
-                <!--<form class="pure-form pure-form-aligned">-->
-                    <!--<div class="pure-control-group">-->
-                        <!--<input type="text" class="pure-input-rounded pure-u-1" placeholder="search">-->
-                    <!--</div>-->
-                <!--</form>-->
-            <!--</div>-->
+            <div class="posts">
+                <form class="pure-form pure-form-aligned" action="." method="get">
+                    <div class="pure-control-group">
+                        <input name="tag" type="text" class="pure-input-rounded pure-u-1" placeholder="Search by tag">
+                    </div>
+                </form>
+            </div>
 
             <!-- A wrapper for all the blog posts -->
             <div id="results" class="posts">
@@ -63,16 +63,29 @@
                       <p class="post-meta">
                           Observed {{=it.date}} tagged as:
                           {{~it.tags :value:index}}
-                              <a class="post-category" href="#">{{=value}}!</a>
+                              <a class="post-category" href="?tag={{=value}}">{{=value}}</a>
                           {{~}}
                       </p>
                       <br />
                       <a-scene class="pure-u-1" embedded>
                           <a-assets>
-                            <img id="{{=it.id}}_img" src="{{=it.photosphere_url}}">
+                            <img id="img_{{=it.id}}" src="{{=it.photosphere_url}}">
                           </a-assets>
-                          <a-sky src="#{{=it.id}}_img" rotation="0 -130 0"></a-sky>
+                          <a-sky src="#img_{{=it.id}}"></a-sky>
                       </a-scene>
+                  </div>
+              </script>
+
+              <script id="tag_result" type="text/x-dot-template">
+                  <h1 class="content-subhead">Latest Photosphere Ob</h1>
+                  <div class="post">
+                      <p class="post-meta">
+                          Observed {{=it.date}} tagged as:
+                          {{~it.tags :value:index}}
+                              <a class="post-category" href="?tag={{=value}}">{{=value}}</a>
+                          {{~}}
+                      </p>
+                      <a href="?id={{=it.id}}" title="View">View</a>
                   </div>
               </script>
 

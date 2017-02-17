@@ -22,6 +22,45 @@ app.use(fileUpload());
 
 app.use(express.static(__dirname + "/public"));
 
+app.get("/by_tag/:tag", function (req, res) {
+  var tag = req.params.tag
+
+  function findByTag(tag, limit) {
+      limit = limit || 5 ;
+      return new Promise(function (resolve, reject) {
+          var params = {
+              TableName: table,
+              Limit: limit,
+              Select: "ALL_ATTRIBUTES",
+              ExpressionAttributeValues: {
+                  ":tag": {
+                      S: tag
+                  }
+              },
+              FilterExpression: "contains(tags, :tag)"
+          };
+          ddb.scan(params, function(err, data) {
+              if (!err) {
+                  resolve(data);
+              } else {
+                  reject(err);
+              }
+          });
+
+      });
+  }
+
+  findByTag(tag)
+      .then(function(data){
+          res.status(200).send(data);
+      })
+      .catch(function(err){
+          res.status(500).send(err);
+      });
+
+
+});
+
 app.get("/id/:id", function (req, res) {
 
     var id = req.params.id;
