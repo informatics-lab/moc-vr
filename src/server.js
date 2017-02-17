@@ -154,6 +154,17 @@ app.post("/post", function (req, res) {
 
     }
 
+    // Get the image headding (direction)
+    function getHeadding(img_upload){
+      try{
+        var headding_match = String(img_upload.data).match(/PoseHeadingDegrees[ ]?=[ ]?"([0-9][0-9]?[0-9]?)"/);
+        var headding = Number(headding_match[1]);
+        return headding;
+      } catch(err){
+        return null;
+      }
+    }
+
     // upload file to s3
     function uploadFile(id, file, name) {
         return new Promise(function (resolve, reject) {
@@ -176,21 +187,25 @@ app.post("/post", function (req, res) {
     // add entry to ddb
     function insert(obj) {
         return new Promise(function (resolve, reject) {
+            var data = {
+                id: {S: obj.id},
+                uploaded: {S: new Date().toISOString()},
+                dateTime: {S: new Date(obj.dt).toISOString()},
+                photosphere: {S: obj.p},
+                lidar: {S: obj.l},
+                windSpeed: {N: obj.ws},
+                windDirection: {N: obj.wd},
+                windGust: {N: obj.wg},
+                temperature: {N: obj.t},
+                dewPoint: {N: obj.dp},
+                visibility: {N: obj.v},
+                tags: {SS: obj.tags},
+            }
+            if(typeof(obj.h) === 'number'){
+              data.headding = {N: String(obj.h)}
+            }
             var params = {
-                Item: {
-                    id: {S: obj.id},
-                    uploaded: {S: new Date().toISOString()},
-                    dateTime: {S: new Date(obj.dt).toISOString()},
-                    photosphere: {S: obj.p},
-                    lidar: {S: obj.l},
-                    windSpeed: {N: obj.ws},
-                    windDirection: {N: obj.wd},
-                    windGust: {N: obj.wg},
-                    temperature: {N: obj.t},
-                    dewPoint: {N: obj.dp},
-                    visibility: {N: obj.v},
-                    tags: {SS: obj.tags}
-                },
+                Item: data,
                 TableName: table
             };
 
@@ -215,7 +230,8 @@ app.post("/post", function (req, res) {
                     var obj = Object.assign({
                         id: id,
                         p: resultArray[0].Location,
-                        l: resultArray[1].Location
+                        l: resultArray[1].Location,
+                        h: getHeadding(req.files.p)
                     }, req.body);
                     return insert(obj);
                 })
