@@ -68,7 +68,10 @@
                       </p>
                       <br />
                       <a-scene class="pure-u-1" embedded>
-                          <a-sky src="{{=it.photosphere_url}}" rotation="0 -130 0"></a-sky>
+                          <a-assets>
+                            <img id="{{=it.id}}_img" src="{{=it.photosphere_url}}">
+                          </a-assets>
+                          <a-sky src="#{{=it.id}}_img" rotation="0 -130 0"></a-sky>
                       </a-scene>
                   </div>
               </script>

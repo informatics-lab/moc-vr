@@ -37,7 +37,8 @@ function getId(id) {
             container.innerHTML = render_photosphere_result({
               date:new Date(result.dateTime.S).toDateString(),
               tags:result.tags.SS,
-              photosphere_url:result.photosphere.S
+              photosphere_url:result.photosphere.S,
+              id:result.id.S
             });
             document.getElementById("results").appendChild(container)
             return;
