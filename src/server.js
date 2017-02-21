@@ -17,10 +17,14 @@ var express = require("express"),
 var table = "moc-vr";
 var bucket = "moc-vr";
 
+var proxy = require('express-http-proxy');
 
 app.use(fileUpload());
 
 app.use(express.static(__dirname + "/public"));
+
+app.use('/img/', proxy('moc-vr.s3-eu-west-1.amazonaws.com/'));
+
 
 app.get("/tag/:tag", function (req, res) {
     var tag = req.params.tag.trim().toLowerCase();

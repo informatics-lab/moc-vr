@@ -13,23 +13,6 @@ window.onload = function () {
     }
 };
 
-
-// function get3Latest() {
-//
-//     var search = "http://search-moc-vr-rlgduidkxakbtiill2boumjn5a.eu-west-1.cloudsearch.amazonaws.com/2013-01-01/search?";
-//     var qlatest = encodeURIComponent("q=uploaded:{,'"+new Date().toISOString+"']");
-//     var qparser = "q.parser=structured";
-//     var qreturn = "return=all";
-//     var qlimit = "cursor=initial&size=3";
-//     var qsort = "sort=uploaded ";
-//
-//     fetch()
-//         .then(function(resp){
-//             console.log(resp);
-//         })
-//
-// }
-
 render_subheading = doT.template(document.getElementById("subheading").text);
 
 render_photosphere_result = doT.template(document.getElementById("photosphere_result").text);
@@ -45,14 +28,13 @@ function getId(id) {
             container1.innerHTML = render_subheading({text:"Photosphere Ob"});
             document.getElementById("results").appendChild(container1);
 
-            var img = document.createElement("img");
-            img.src = (URL || webkitURL).createObjectURL(result.photosphere.S);
+            var img_url = '/img' + result.photosphere.S.split('amazonaws.com')[1]
 
             var container = document.createElement("div");
             container.innerHTML = render_photosphere_result({
               date:new Date(result.dateTime.S).toDateString(),
               tags:result.tags.SS,
-              photosphere_url: img.src,
+              photosphere_url: img_url,
               id:result.id.S
             });
             document.getElementById("results").appendChild(container);
