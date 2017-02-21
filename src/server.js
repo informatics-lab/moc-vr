@@ -17,10 +17,54 @@ var express = require("express"),
 var table = "moc-vr";
 var bucket = "moc-vr";
 
+var proxy = require('express-http-proxy');
 
 app.use(fileUpload());
 
 app.use(express.static(__dirname + "/public"));
+
+app.use('/img/', proxy('moc-vr.s3-eu-west-1.amazonaws.com/'));
+
+
+app.get("/tag/:tag", function (req, res) {
+    var tag = req.params.tag.trim().toLowerCase();
+
+    function findByTag(tag, limit) {
+        limit = limit || 5;
+        return new Promise(function (resolve, reject) {
+            var params = {
+                TableName: table,
+                Limit: limit,
+                Select: "ALL_ATTRIBUTES",
+                ExpressionAttributeValues: {
+                    ":tag": {
+                        S: tag
+                    }
+                },
+                FilterExpression: "contains(tags, :tag)"
+            };
+            ddb.scan(params, function (err, data) {
+                if (!err) {
+                    resolve(data);
+                } else {
+                    reject(err);
+                }
+            });
+
+        });
+    }
+
+    findByTag(tag)
+        .then(function (data) {
+            res.status(200).send(data);
+        })
+        .catch(function (err) {
+            console.error(err);
+            res.status(500).send(err);
+        });
+
+
+});
 
 app.get("/id/:id", function (req, res) {
 
@@ -39,7 +83,7 @@ app.get("/id/:id", function (req, res) {
                 },
                 KeyConditionExpression: "id = :id"
             };
-            ddb.query(params, function(err, data) {
+            ddb.query(params, function (err, data) {
                 if (!err) {
                     resolve(data);
                 } else {
@@ -51,10 +95,11 @@ app.get("/id/:id", function (req, res) {
     }
 
     findById(id)
-        .then(function(data){
+        .then(function (data) {
             res.status(200).send(data);
         })
-        .catch(function(err){
+        .catch(function (err) {
+            console.error(err);
             res.status(500).send(err);
         })
 
@@ -115,6 +160,17 @@ app.post("/post", function (req, res) {
 
     }
 
+    // Get the image heading (direction)
+    function getHeading(img_upload) {
+        try {
+            var headding_match = String(img_upload.data).match(/PoseHeadingDegrees[ ]?=[ ]?"([0-9][0-9]?[0-9]?)"/);
+            var headding = Number(headding_match[1]);
+            return headding;
+        } catch (err) {
+            return null;
+        }
+    }
+
     // upload file to s3
     function uploadFile(id, file, name) {
         return new Promise(function (resolve, reject) {
@@ -137,21 +193,25 @@ app.post("/post", function (req, res) {
     // add entry to ddb
     function insert(obj) {
         return new Promise(function (resolve, reject) {
+            var data = {
+                id: {S: obj.id},
+                uploaded: {S: new Date().toISOString()},
+                dateTime: {S: new Date(obj.dt).toISOString()},
+                photosphere: {S: obj.p},
+                lidar: {S: obj.l},
+                windSpeed: {N: obj.ws},
+                windDirection: {N: obj.wd},
+                windGust: {N: obj.wg},
+                temperature: {N: obj.t},
+                dewPoint: {N: obj.dp},
+                visibility: {N: obj.v},
+                tags: {SS: obj.tags}
+            };
+            if (typeof(obj.h) === 'number') {
+                data.heading = {N: String(obj.h)}
+            }
             var params = {
-                Item: {
-                    id: {S: obj.id},
-                    uploaded: {S: new Date().toISOString()},
-                    dateTime: {S: new Date(obj.dt).toISOString()},
-                    photosphere: {S: obj.p},
-                    lidar: {S: obj.l},
-                    windSpeed: {N: obj.ws},
-                    windDirection: {N: obj.wd},
-                    windGust: {N: obj.wg},
-                    temperature: {N: obj.t},
-                    dewPoint: {N: obj.dp},
-                    visibility: {N: obj.v},
-                    tags: {SS: obj.tags}
-                },
+                Item: data,
                 TableName: table
             };
 
@@ -176,13 +236,14 @@ app.post("/post", function (req, res) {
                     var obj = Object.assign({
                         id: id,
                         p: resultArray[0].Location,
-                        l: resultArray[1].Location
+                        l: resultArray[1].Location,
+                        h: getHeading(req.files.p)
                     }, req.body);
                     return insert(obj);
                 })
                 .then(function () {
                     // redirect back to index ??
-                    res.writeHead(301, {Location: "/index.html?id="+id});
+                    res.writeHead(301, {Location: "/index.html?id=" + id});
                     res.end();
                     // res.status(201).location("/index.html?id="+id);
                 })

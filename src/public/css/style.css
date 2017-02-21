@@ -37,7 +37,6 @@ h3 {
     background-color: #2A2A2A;
     background-size:cover;
     color: #fff;
-
 }
 
 .brand-title,
@@ -59,7 +58,7 @@ h3 {
 }
 .nav-item {
     display: inline-block;
-    *display: inline;
+    display: inline;
     zoom: 1;
 }
 .nav-item a {
@@ -73,7 +72,7 @@ h3 {
 }
 .nav-item a:hover,
 .nav-item a:focus {
-    border: 2px solid #B9DC0C;;
+    border: 2px solid #B9DC0C;
     text-decoration: none;
 }
 
