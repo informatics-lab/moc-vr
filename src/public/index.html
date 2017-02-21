@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="/css/style.css">
     <!--<![endif]-->
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aframe/0.5.0/aframe.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.2/fetch.min.js" type="text/javascript"></script>
 </head>
 <body>
@@ -57,39 +58,40 @@
             <!-- A wrapper for all the blog posts -->
             <div id="results" class="posts">
 
-              <script id="photosphere_result" type="text/x-dot-template">
-                  <h1 class="content-subhead">Latest Photosphere Ob</h1>
-                  <div class="post">
-                      <p class="post-meta">
-                          Observed {{=it.date}} tagged as:
-                          {{~it.tags :value:index}}
-                              <a class="post-category" href="?tag={{=value}}">{{=value}}</a>
-                          {{~}}
-                      </p>
-                      <br />
-                      <a-scene class="pure-u-1" embedded>
-                          <a-assets>
-                            <img id="img_{{=it.id}}" src="{{=it.photosphere_url}}">
-                          </a-assets>
-                          <a-sky src="#img_{{=it.id}}"></a-sky>
-                      </a-scene>
-                  </div>
-              </script>
+                <script id="subheading" type="text/x-dot-template">
+                    <h1 class="content-subhead">{{=it.text}}</h1>
+                </script>
 
-              <script id="tag_result" type="text/x-dot-template">
-                  <h1 class="content-subhead">Latest Photosphere Ob</h1>
-                  <div class="post">
-                      <p class="post-meta">
-                          Observed {{=it.date}} tagged as:
-                          {{~it.tags :value:index}}
-                              <a class="post-category" href="?tag={{=value}}">{{=value}}</a>
-                          {{~}}
-                      </p>
-                      <a href="?id={{=it.id}}" title="View">View</a>
-                  </div>
-              </script>
+                <script id="photosphere_result" type="text/x-dot-template">
+                    <div class="post">
+                        <p class="post-meta">
+                            Observed {{=it.date}} tagged as:
+                            {{~it.tags :value:index}}
+                            <a class="post-category" href="?tag={{=value}}">{{=value}}</a>
+                            {{~}}
+                        </p>
+                        <br/>
+                        <a-scene class="pure-u-1" embedded>
+                            <a-assets>
+                                <img id="img_{{=it.id}}" crossorigin="" src="{{=it.photosphere_url}}">
+                            </a-assets>
+                            <a-sky src="#img_{{=it.id}}"></a-sky>
+                        </a-scene>
+                    </div>
+                </script>
 
+                <script id="tag_result" type="text/x-dot-template">
 
+                    <div class="post">
+                        <p class="post-meta">
+                            Observed {{=it.date}} tagged as:
+                            {{~it.tags :value:index}}
+                            <a class="post-category" href="?tag={{=value}}">{{=value}}</a>
+                            {{~}}
+                        </p>
+                        <a href="?id={{=it.id}}" title="View">View</a>
+                    </div>
+                </script>
 
 
             </div>
@@ -97,9 +99,8 @@
         </div>
     </div>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/aframe/0.5.0/aframe.min.js"></script>
+
 <script src="js/doT.min.js"></script>
-<script src="js/exif.js"></script>
 <script src="js/index.js"></script>
 
 </body>

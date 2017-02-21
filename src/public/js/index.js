@@ -29,7 +29,10 @@ window.onload = function () {
 //         })
 //
 // }
-render_photosphere_result = doT.template(document.getElementById('photosphere_result').text);
+
+render_subheading = doT.template(document.getElementById("subheading").text);
+
+render_photosphere_result = doT.template(document.getElementById("photosphere_result").text);
 function getId(id) {
     fetch("/id/" + id)
         .then(function (res) {
@@ -37,36 +40,57 @@ function getId(id) {
         })
         .then(function (json) {
             var result = json.Items[0];
+
+            var container1 = document.createElement("div");
+            container1.innerHTML = render_subheading({text:"Photosphere Ob"});
+            document.getElementById("results").appendChild(container1);
+
+            var img = document.createElement("img");
+            img.src = (URL || webkitURL).createObjectURL(result.photosphere.S);
+
             var container = document.createElement("div");
             container.innerHTML = render_photosphere_result({
               date:new Date(result.dateTime.S).toDateString(),
               tags:result.tags.SS,
-              photosphere_url:result.photosphere.S,
+              photosphere_url: img.src,
               id:result.id.S
             });
-            document.getElementById("results").appendChild(container)
+            document.getElementById("results").appendChild(container);
             return;
         })
+        .catch(function(err){
+            console.error(err);
+        });
 }
 
-render_tag_result = doT.template(document.getElementById('tag_result').text);
+render_tag_result = doT.template(document.getElementById("tag_result").text);
 function getByTag(tag) {
-    fetch("/by_tag/" + tag)
+    fetch("/tag/" + tag)
         .then(function (res) {
             return res.json();
         })
         .then(function (json) {
+
+            var container1 = document.createElement("div");
+            container1.innerHTML = render_subheading({text:"Matching Photosphere Obs"});
+            document.getElementById("results").appendChild(container1);
+
             for (var i = 0; i < json.Items.length; i++) {
                 var result = json.Items[i];
+
                 var container = document.createElement("div");
                 container.innerHTML = render_tag_result({
                   date:new Date(result.dateTime.S).toDateString(),
                   tags:result.tags.SS,
                   id:result.id.S
                 });
-                document.getElementById("results").appendChild(container)
+
+                document.getElementById("results").appendChild(container);
             }
             return;
+        })
+        .catch(function(err){
+            console.error(err);
         })
 }
 
