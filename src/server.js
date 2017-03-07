@@ -9,6 +9,7 @@ AWS.config.update({
 var s3 = new AWS.S3({apiVersion: "2006-03-01"});
 var ddb = new AWS.DynamoDB({apiVersion: "2012-08-10"});
 
+var xmpReader = require('xmp-reader');
 var uuid = require("node-uuid");
 var express = require("express"),
     fileUpload = require("../lib/index.js"),
@@ -163,10 +164,21 @@ app.post("/post", function (req, res) {
     // Get the image heading (direction)
     function getHeading(img_upload) {
         try {
-            var headding_match = String(img_upload.data).match(/PoseHeadingDegrees[ ]?=[ ]?"([0-9][0-9]?[0-9]?)"/);
+            // console.log(String(img_upload.data));
+            var buf = Buffer.from(img_upload.data, 'ascii');
+            var headding_match = buf.toString('utf8').match(/PoseHeadingDegrees[ ]?=[ ]?"([0-9][0-9]?[0-9]?)"/);
             var headding = Number(headding_match[1]);
-            return headding;
+            console.log("HEADDING:\n",headding);
+
+            // xmpReader.fromBuffer(img_upload.data, function(err, data) {
+            //     if (err) {console.log(err);}
+            //     else {console.log(data);}
+            // });
+
+
+            // return headding;
         } catch (err) {
+            console.error(err);
             return null;
         }
     }
@@ -239,7 +251,7 @@ app.post("/post", function (req, res) {
                         l: resultArray[1].Location,
                         h: getHeading(req.files.p)
                     }, req.body);
-                    return insert(obj);
+                    // return insert(obj);
                 })
                 .then(function () {
                     // redirect back to index ??

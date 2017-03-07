@@ -1,0 +1,35 @@
+version: "2"
+services:
+
+  moc-vr:
+    container_name: moc-vr
+    build: .
+    environment:
+    - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+    - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+
+  kong-database:
+    container_name: kong-database
+    image: cassandra:2.2
+
+  kong:
+    container_name: kong
+    image: kong
+    restart: always
+    links:
+    - kong-database
+    - moc-vr
+    environment:
+    - KONG_DATABASE=cassandra
+    - KONG_CASSANDRA_CONTACT_POINTS=kong-database
+    ports:
+    - 80:8000
+
+  kong-dashboard:
+    container_name: kong-dashboard
+    image: pgbi/kong-dashboard
+    command: npm start -- -a ${KONG_DASHBOARD_USER}=${KONG_DASHBOARD_PASSWORD}
+    links:
+    - kong
+    ports:
+    - 8080:8080

@@ -28,7 +28,7 @@ function getId(id) {
             container1.innerHTML = render_subheading({text:"Photosphere Ob"});
             document.getElementById("results").appendChild(container1);
 
-            var img_url = '/img' + result.photosphere.S.split('amazonaws.com')[1]
+            var img_url = '/img' + result.photosphere.S.split('amazonaws.com')[1];
 
             var container = document.createElement("div");
             container.innerHTML = render_photosphere_result({
