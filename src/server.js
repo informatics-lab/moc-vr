@@ -163,7 +163,7 @@ app.post("/post", function (req, res) {
     // Get the image heading (direction)
     function getHeading(img_upload) {
         try {
-            var headding_match = String(img_upload.data).match(/PoseHeadingDegrees[ ]?=[ ]?"([0-9][0-9]?[0-9]?)"/);
+            var headding_match = String(img_upload.data).match(/PoseHeadingDegrees[ ]?=[ ]?"([0-9.-]+)"/);
             var headding = Number(headding_match[1]);
             return headding;
         } catch (err) {
