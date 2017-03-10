@@ -47,3 +47,6 @@ Build and run the service:
 # Credits
 Used to handle multipart uploads
 https://github.com/richardgirges/express-fileupload
+
+Used to handle authentication
+https://github.com/bitly/oauth2_proxy
