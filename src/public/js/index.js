@@ -17,7 +17,9 @@ render_subheading = doT.template(document.getElementById("subheading").text);
 
 render_photosphere_result = doT.template(document.getElementById("photosphere_result").text);
 function getId(id) {
-    fetch("/id/" + id)
+    fetch("/id/" + id, {
+        credentials: 'same-origin'
+    })
         .then(function (res) {
             return res.json();
         })
@@ -28,7 +30,7 @@ function getId(id) {
             container1.innerHTML = render_subheading({text:"Photosphere Ob"});
             document.getElementById("results").appendChild(container1);
 
-            var img_url = '/img' + result.photosphere.S.split('amazonaws.com')[1]
+            var img_url = '/img' + result.photosphere.S.split('amazonaws.com')[1];
 
             var container = document.createElement("div");
             container.innerHTML = render_photosphere_result({
@@ -47,7 +49,9 @@ function getId(id) {
 
 render_tag_result = doT.template(document.getElementById("tag_result").text);
 function getByTag(tag) {
-    fetch("/tag/" + tag)
+    fetch("/tag/" + tag, {
+        credentials: 'same-origin'
+    })
         .then(function (res) {
             return res.json();
         })

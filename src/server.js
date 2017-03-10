@@ -1,5 +1,5 @@
-var accessKeyId = process.env.AWS_ACCESS_KEY_ID;
-var secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
+var accessKeyId = process.env.MOC_VR_AWS_ACCESS_KEY_ID;
+var secretAccessKey = process.env.MOC_VR_AWS_SECRET_ACCESS_KEY;
 
 var AWS = require("aws-sdk");
 AWS.config.update({
@@ -23,7 +23,18 @@ app.use(fileUpload());
 
 app.use(express.static(__dirname + "/public"));
 
-app.use('/img/', proxy('moc-vr.s3-eu-west-1.amazonaws.com/'));
+app.use('/img/', proxy('moc-vr.s3-eu-west-1.amazonaws.com/', {
+        decorateRequest: function (proxyReq, originalReq) {
+            // you can update headers
+            proxyReq.headers["Authorization"] = "";
+            proxyReq.headers["Cookie"] = "";
+            // you can change the method
+            proxyReq.method = 'GET';
+            // you can munge the bodyContent.
+            return proxyReq;
+        }
+    })
+);
 
 
 app.get("/tag/:tag", function (req, res) {
