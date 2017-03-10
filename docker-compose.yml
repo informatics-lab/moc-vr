@@ -2,34 +2,23 @@ version: "2"
 services:
 
   moc-vr:
-    container_name: moc-vr
-    build: .
+    image: quay.io/informaticslab/moc-vr
     environment:
-    - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-    - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+    - MOC_VR_AWS_ACCESS_KEY_ID=${MOC_VR_AWS_ACCESS_KEY_ID}
+    - MOC_VR_AWS_SECRET_ACCESS_KEY=${MOC_VR_AWS_SECRET_ACCESS_KEY}
 
-  kong-database:
-    container_name: kong-database
-    image: cassandra:2.2
-
-  kong:
-    container_name: kong
-    image: kong
-    restart: always
+  oauth2_proxy:
+    image: skippy/oauth2_proxy
+    environment:
+    - OAUTH2_PROXY_CLIENT_ID=${MOC_VR_OAUTH_CLIENT_ID}
+    - OAUTH2_PROXY_CLIENT_SECRET=${MOC_VR_OAUTH_CLIENT_SECRET}
+    - OAUTH2_PROXY_COOKIE_SECRET=${MOC_VR_OAUTH_COOKIE_SECRET}
+    ports:
+    - 80:4180
     links:
-    - kong-database
     - moc-vr
-    environment:
-    - KONG_DATABASE=cassandra
-    - KONG_CASSANDRA_CONTACT_POINTS=kong-database
-    ports:
-    - 80:8000
+    volumes:
+    - ./oauth2_proxy.cfg:/etc/oauth2_proxy.cfg
+    command: -config /etc/oauth2_proxy.cfg -provider github
 
-  kong-dashboard:
-    container_name: kong-dashboard
-    image: pgbi/kong-dashboard
-    command: npm start -- -a ${KONG_DASHBOARD_USER}=${KONG_DASHBOARD_PASSWORD}
-    links:
-    - kong
-    ports:
-    - 8080:8080
+

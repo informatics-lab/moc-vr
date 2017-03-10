@@ -3,7 +3,7 @@ MOC-VR Application. Prototype for viewing observations in VR.
 
 
 ## Credentials
-you will need an `AWS IAM` with keys to access `s3` and `dynamoDB`.
+You will need an `AWS IAM` with keys to access `s3` and `dynamoDB`.
 
 
 ## Dev Install
@@ -33,12 +33,17 @@ Visit service in browser:
 
 
 ## Building & Running with Docker Compose
-This will also build the Kong (API Gateway) service to restrict access to the application via basic HTTP auth.  
+This will also build the oauth2_proxy service to restrict access to the application.  
 Build the containers:     
 `docker-compose up -d --build`  
 Check containers are running:  
 `docker ps`   
 
 
+## Building & Running with Terraform
+Build and run the service:
+`terraform apply terraform`
+
 # Credits
+Used to handle multipart uploads
 https://github.com/richardgirges/express-fileupload

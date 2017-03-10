@@ -17,7 +17,9 @@ render_subheading = doT.template(document.getElementById("subheading").text);
 
 render_photosphere_result = doT.template(document.getElementById("photosphere_result").text);
 function getId(id) {
-    fetch("/id/" + id)
+    fetch("/id/" + id, {
+        credentials: 'same-origin'
+    })
         .then(function (res) {
             return res.json();
         })
@@ -47,7 +49,9 @@ function getId(id) {
 
 render_tag_result = doT.template(document.getElementById("tag_result").text);
 function getByTag(tag) {
-    fetch("/tag/" + tag)
+    fetch("/tag/" + tag, {
+        credentials: 'same-origin'
+    })
         .then(function (res) {
             return res.json();
         })
