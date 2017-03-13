@@ -14,3 +14,4 @@ test/uploadedfiles/*
 !test/uploadedfiles/placeholder.txt
 credentials.sh
 .idea
+*.tfstate*

@@ -177,3 +177,25 @@ h3 {
         text-align: center;
     }
 }
+
+
+/*
+ * Reposition the vr goggles icon to top right.
+ */
+.a-enter-vr {
+    top: 0;
+}
+
+.a-enter-vr-button {
+    top:0;
+    bottom:auto;
+    margin-top:1%;
+    margin-right:1%;
+}
+
+.a-enter-vr.embedded {
+    right:auto;
+    bottom:auto;
+}
+
+
