@@ -40,12 +40,10 @@ app.use('/img/', proxy('moc-vr.s3-eu-west-1.amazonaws.com/', {
 app.get("/tag/:tag", function (req, res) {
     var tag = req.params.tag.trim().toLowerCase();
 
-    function findByTag(tag, limit) {
-        limit = limit || 5;
+    function findByTag(tag) {
         return new Promise(function (resolve, reject) {
             var params = {
                 TableName: table,
-                Limit: limit,
                 Select: "ALL_ATTRIBUTES",
                 ExpressionAttributeValues: {
                     ":tag": {
