@@ -30,7 +30,7 @@ function getId(id) {
             container1.innerHTML = render_subheading({text:"Photosphere Ob"});
             document.getElementById("results").appendChild(container1);
 
-            var img_url = '/img' + result.photosphere.S.split('amazonaws.com')[1];
+            var img_url = "/img" + result.photosphere.S.split("amazonaws.com")[1];
 
             var container = document.createElement("div");
             container.innerHTML = render_photosphere_result({
@@ -64,10 +64,13 @@ function getByTag(tag) {
             for (var i = 0; i < json.Items.length; i++) {
                 var result = json.Items[i];
 
+                var img_url = "/img" + result.photosphere.S.split("amazonaws.com")[1] + "-small";
+
                 var container = document.createElement("div");
                 container.innerHTML = render_tag_result({
                   date:new Date(result.dateTime.S).toDateString(),
                   tags:result.tags.SS,
+                  photosphere_avatar_url:img_url,
                   id:result.id.S
                 });
 

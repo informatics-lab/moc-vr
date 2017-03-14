@@ -112,6 +112,7 @@ h3 {
     color: #999;
     font-size: 90%;
     margin: 0;
+    line-height: 1.6em;
 }
 
 .post-category {
@@ -198,4 +199,12 @@ h3 {
     bottom:auto;
 }
 
+/*
+ * Reposition post avatars
+ */
+.post-avatar {
+    float:left;
+    margin:auto;
+    margin-right:0.5em;
+}
 

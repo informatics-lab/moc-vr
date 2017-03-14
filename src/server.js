@@ -25,12 +25,9 @@ app.use(express.static(__dirname + "/public"));
 
 app.use('/img/', proxy('moc-vr.s3-eu-west-1.amazonaws.com/', {
         decorateRequest: function (proxyReq, originalReq) {
-            // you can update headers
             proxyReq.headers["Authorization"] = "";
             proxyReq.headers["Cookie"] = "";
-            // you can change the method
             proxyReq.method = 'GET';
-            // you can munge the bodyContent.
             return proxyReq;
         }
     })

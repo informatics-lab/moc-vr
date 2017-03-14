@@ -83,15 +83,15 @@
                 </script>
 
                 <script id="tag_result" type="text/x-dot-template">
-
                     <div class="post">
+                        <a href="?id={{=it.id}}" title="View"><img class="post-avatar" crossorigin="" src="{{=it.photosphere_avatar_url}}"></a>
                         <p class="post-meta">
                             Observed {{=it.date}} tagged as:
                             {{~it.tags :value:index}}
                             <a class="post-category" href="?tag={{=value}}">{{=value}}</a>
                             {{~}}
                         </p>
-                        <a href="?id={{=it.id}}" title="View">View</a>
+                        <br />
                     </div>
                 </script>
 
