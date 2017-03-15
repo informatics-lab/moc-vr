@@ -3,6 +3,7 @@
  */
 
 window.onload = function () {
+    tagCloud();
     var id = getParameterByName("id");
     var tag = getParameterByName("tag");
     if (id) {
@@ -12,6 +13,35 @@ window.onload = function () {
         getByTag(tag);
     }
 };
+
+render_tag_cloud = doT.template(document.getElementById("tag_cloud").text);
+function tagCloud() {
+    fetch("/tags", {
+        credentials: 'same-origin'
+    })
+        .then(function (res) {
+            return res.json();
+        })
+        .then(function (json) {
+
+            var tags = [];
+            for (var property in json) {
+                if (json.hasOwnProperty(property)) {
+                    tags.push(property);
+                }
+            }
+            var container = document.createElement("div");
+            container.innerHTML = render_tag_cloud({
+               tags:tags
+            });
+            document.getElementById("search").appendChild(container);
+
+        })
+        .catch(function(err) {
+            console.error(err);
+        })
+}
+
 
 render_subheading = doT.template(document.getElementById("subheading").text);
 

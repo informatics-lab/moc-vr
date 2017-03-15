@@ -49,12 +49,19 @@
 
     <div class="content pure-u-1 pure-u-md-3-4">
         <div>
-            <div class="posts">
+            <div id="search" class="posts">
                 <form class="pure-form pure-form-aligned" action="." method="get">
                     <div class="pure-control-group">
                         <input name="tag" type="text" class="pure-input-rounded pure-u-1" placeholder="Search by tag">
                     </div>
                 </form>
+                <script id="tag_cloud" type="text/x-dot-template">
+                    <p>
+                    {{~it.tags :value:index}}
+                    <a class="post-category" href="?tag={{=value}}">{{=value}}</a>
+                    {{~}}
+                    </p>
+                </script>
             </div>
 
             <!-- A wrapper for all the blog posts -->

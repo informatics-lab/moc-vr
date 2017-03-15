@@ -72,6 +72,47 @@ app.get("/tag/:tag", function (req, res) {
 
 });
 
+app.get("/tags", function (req, res) {
+
+    function findAllTags() {
+        return new Promise(function (resolve, reject) {
+            var params = {
+                TableName: table,
+                Select: "SPECIFIC_ATTRIBUTES",
+                ProjectionExpression: "tags"
+            };
+            ddb.scan(params, function (err, data) {
+                if (!err) {
+                    resolve(data);
+                } else {
+                    reject(err);
+                }
+            });
+
+        });
+    }
+
+    findAllTags()
+        .then(function (data) {
+            var allTags = [];
+            data.Items.forEach(function (item) {
+                item.tags.SS.forEach(function(tag){
+                    allTags.push(tag);
+                })
+            });
+            var tags = { };
+            for (var i = 0, j = allTags.length; i < j; i++) {
+                tags[allTags[i]] = (tags[allTags[i]] || 0) + 1;
+            }
+            res.status(200).send(tags);
+        })
+        .catch(function (err) {
+            console.error(err);
+            res.status(500).send(err);
+        });
+
+});
+
 app.get("/id/:id", function (req, res) {
 
     var id = req.params.id;

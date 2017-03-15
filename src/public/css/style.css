@@ -208,3 +208,16 @@ h3 {
     margin-right:0.5em;
 }
 
+/*
+ * Re-style tags
+ */
+.post-category {
+    margin-top:1em;
+    margin-bottom:1em;
+    line-height: 2em;
+}
+.post-category:hover {
+    text-decoration: none;
+    background-color: #2A2A2A;
+    color: #B9DC0C;
+}
