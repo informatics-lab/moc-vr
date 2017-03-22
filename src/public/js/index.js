@@ -72,7 +72,7 @@ function getId(id) {
             });
             document.getElementById("results").appendChild(container);
         })
-        .then(function() {
+        .then(function () {
             window.location = "#results";
             return;
         })
@@ -83,7 +83,7 @@ function getId(id) {
 
 render_tag_result = doT.template(document.getElementById("tag_result").text);
 function getByTag(tag) {
-    fetch("/tag/" + tag, {
+    return fetch("/tag/" + tag, {
         credentials: 'same-origin'
     })
         .then(function (res) {
@@ -111,7 +111,7 @@ function getByTag(tag) {
                 document.getElementById("results").appendChild(container);
             }
         })
-        .then(function() {
+        .then(function () {
             window.location = "#results";
             return;
         })
