@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script data-require="jquery@1.11.0" data-semver="1.11.0" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+</head>
+
+<div id="container"></div>
+<input id="heading" type="range" min="0" max="359" step="1"/>
+<script type="text/javascript" src="js/windbarb.js"></script>
+<script type="text/javascript">
+    var data = {
+        heading: 240,
+        dewPoint: -3.5,
+        temperature: 25.8,
+        visibility: 3000,
+        windDirection: 118,
+        windSpeed: 18,
+        windGust: 24
+    };
+
+    var width = 800;
+    var height = 600;
+
+    window.onload = function () {
+         var parent = document.getElementById("container");
+         var canvas = createHUD(data);
+         parent.appendChild(canvas);
+         WindBarbArrowHandler.WindArrow(30, 45, canvas, 40);
+     };
+</script>
+
+</body>
+</html>
