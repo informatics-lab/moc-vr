@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script data-require="jquery@1.11.0" data-semver="1.11.0" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 </head>
 
 <div id="container"></div>
 <input id="heading" type="range" min="0" max="359" step="1"/>
 <script type="text/javascript" src="js/hud.js"></script>
+<script type="text/javascript" src="js/windbarb.js"></script>
+<link rel="stylesheet" href="css/style.css"/> 
 <script type="text/javascript">
     var data = {
         heading: 240,
@@ -25,7 +28,25 @@
     window.onload = function () {
          var parent = document.getElementById("container");
          var canvas = createHUD(data);
+         var ctx = canvas.getContext("2d");
          parent.appendChild(canvas);
+
+         var svgdiv = document.createElement('div')
+         svgdiv.className = 'wind-barb';
+         WindBarbArrowHandler.WindArrow(data.windSpeed, data.windDirection, svgdiv, 40)
+
+         var oSerializer = new XMLSerializer();
+         var sXML = oSerializer.serializeToString(svgdiv.getElementsByTagName("svg")[0]);
+         var DOMURL = window.URL || window.webkitURL || window;
+         var img = new Image();
+         var svg = new Blob([sXML], {type: 'image/svg+xml'});
+         var url = DOMURL.createObjectURL(svg);
+         img.onload = function() {
+            ctx.drawImage(img, 75, 60);
+            DOMURL.revokeObjectURL(url);
+        }
+
+         img.src = url;
 
          var heading = document.getElementById("heading");
          heading.addEventListener("input", function () {
@@ -33,6 +54,5 @@
          });
      };
 </script>
-
 </body>
 </html>
