@@ -2,7 +2,7 @@
  * Created by tom on 08/02/2017.
  */
 
-document.getElementsByClassName()
+// document.getElementsByClassName()
 
 window.onload = function () {
     tagCloud();

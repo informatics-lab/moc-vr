@@ -1,5 +1,3 @@
-$(function() {
-
   var WindBarbArrowHandler = {
 
     WindArrow: function(speed, direction, container, arrowWidth) {
@@ -22,7 +20,8 @@ $(function() {
         $(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
         .attr({
           height: 2 * arrowWidth,
-          width: 2 * arrowWidth
+          width: 2 * arrowWidth,
+          style: "stroke: black"
         })
       );
       $("svg", container).append(document.createElementNS('http://www.w3.org/2000/svg', 'defs'));
@@ -125,8 +124,3 @@ $(function() {
     },
 
   };
-
-
-  WindBarbArrowHandler.WindArrow(30, 45, $("#windBarbArrow"), 40);
-
-});
