@@ -2,6 +2,7 @@ version: "2"
 services:
 
   moc-vr:
+#    build: .
     image: quay.io/informaticslab/moc-vr:latest
     environment:
     - MOC_VR_AWS_ACCESS_KEY_ID=${MOC_VR_AWS_ACCESS_KEY_ID}

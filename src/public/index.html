@@ -85,7 +85,7 @@
                         <a-scene class="pure-u-1" embedded>
                             <a-camera reverse-mouse-drag="true" ></a-camera>
                             <a-assets>
-                                <img id="img_{{=it.id}}" crossorigin="" src="{{=it.photosphere_url}}">
+                                <img id="img_{{=it.id}}" crossorigin="use-credentials" src="{{=it.photosphere_url}}">
                             </a-assets>
                             <a-sky src="#img_{{=it.id}}"></a-sky>
                         </a-scene>
@@ -94,7 +94,7 @@
 
                 <script id="tag_result" type="text/x-dot-template">
                     <div class="post">
-                        <a href="?id={{=it.id}}" title="View"><img class="post-avatar" crossorigin="" src="{{=it.photosphere_avatar_url}}"></a>
+                        <a href="?id={{=it.id}}" title="View"><img class="post-avatar" crossorigin="use-credentials" src="{{=it.photosphere_avatar_url}}"></a>
                         <p class="post-meta">
                             Observed {{=it.date}} tagged as:
                             {{~it.tags :value:index}}
