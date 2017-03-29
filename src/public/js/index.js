@@ -68,7 +68,12 @@ function getId(id) {
                 date: new Date(result.dateTime.S).toDateString(),
                 tags: result.tags.SS,
                 photosphere_url: img_url,
-                id: result.id.S
+                id: result.id.S,
+                visibility: result.visibility.N,
+                temperature: result.temperature.N,
+                dewPoint: result.dewPoint.N,
+                windDirection: result.windDirection.N,
+                windSpeed: result.windSpeed.N
             });
             document.getElementById("results").appendChild(container);
         })

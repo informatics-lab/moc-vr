@@ -1,24 +1,57 @@
 
+AFRAME.registerComponent('hud', {
+    schema: {
+        width: {type: 'number', default: 0.8},
+        height: {type: 'number', default: 0.6},
+        background: {type: 'color', default: "#FFF"},
+        visibility: {type: 'number'},
+        temperature: {type: 'number'},
+        dewPoint: {type: 'number'},
+        windDirection: {type: 'number'},
+        windSpeed: {type: 'number'}
+    },
+    /**
+     * Initial creation and setting of the mesh.
+     */
+    init: function () {
+        console.log("stuff");
+        var data = this.data;
+        var el = this.el;
+        // Create geometry.
+        this.geometry = new THREE.PlaneBufferGeometry(data.width, data.height);
+        // Create material.
+        var canvas = createHUD(data.width * 1000, data.height * 1000, data.background, data.visibility, data.temperature, data.dewPoint, data.windDirection, data.windSpeed);
+        var texture = new THREE.Texture(canvas);
+        texture.needsUpdate = true;
+
+        this.material = new THREE.MeshStandardMaterial({map: texture, transparent:true});
+        // Create mesh.
+        this.mesh = new THREE.Mesh(this.geometry, this.material);
+        // Set mesh on entity.
+        el.setObject3D('mesh', this.mesh);
+    }
+});
+
 // returns the hud canvas dom element
-function createHUD(d) {
+function createHUD(width, height, bg, visibility, temperature, dewPoint, windDirection, windSpeed) {
     console.log("creating HUD");
 
     var canvas = document.createElement("canvas");
     canvas.width = width;
     canvas.height = height;
-    canvas.setAttribute("style", "border:black 1px solid");
+    // canvas.setAttribute("style", "border:black 1px solid");
 
     var ctx = canvas.getContext("2d");
-    drawBackground(ctx);
-    drawVisibility(ctx, d.visibility);
-    drawTempInstruments(ctx, d.temperature, d.dewPoint);
-    drawWindBarb(ctx, d.windDirection, d.windSpeed, d.windGust);
+    drawBackground(ctx, bg);
+    drawVisibility(ctx, visibility);
+    drawTempInstruments(ctx, temperature, dewPoint);
+    drawWindBarb(ctx, windDirection, windSpeed);
 
     return canvas;
 }
 
-function drawBackground(ctx) {
-    ctx.fillStyle = "#FFFFFF";
+function drawBackground(ctx, bg) {
+    ctx.fillStyle = bg;
     ctx.globalAlpha = 0.3;
     ctx.fillRect(30, 0, 170,800);
     ctx.globalAlpha = 1.0;
@@ -114,7 +147,7 @@ function drawVisibility(ctx, v) {
     }
 }
 
-function drawWindBarb(ctx, wd, ws, wg) {
+function drawWindBarb(ctx, wd, ws) {
     var svgdiv = document.createElement('div');
     svgdiv.className = 'wind-barb';
     WindBarbArrowHandler.WindArrow(ws, wd, svgdiv, 70);
