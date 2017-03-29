@@ -67,6 +67,8 @@
             <!-- A wrapper for all the blog posts -->
             <div id="results" class="posts">
 
+                <a name="results"></a>
+
                 <script id="subheading" type="text/x-dot-template">
                     <h1 class="content-subhead">{{=it.text}}</h1>
                 </script>
@@ -87,7 +89,7 @@
                                           material="color: gray; opacity: 0.5"></a-entity>
                             </a-camera>
                             <a-assets>
-                                <img id="img_{{=it.id}}" crossorigin="" src="{{=it.photosphere_url}}">
+                                <img id="img_{{=it.id}}" crossorigin="use-credentials" src="{{=it.photosphere_url}}">
                             </a-assets>
                             <a-sky src="#img_{{=it.id}}"></a-sky>
                         </a-scene>
@@ -96,7 +98,7 @@
 
                 <script id="tag_result" type="text/x-dot-template">
                     <div class="post">
-                        <a href="?id={{=it.id}}" title="View"><img class="post-avatar" crossorigin="" src="{{=it.photosphere_avatar_url}}"></a>
+                        <a href="?id={{=it.id}}" title="View"><img class="post-avatar" crossorigin="use-credentials" src="{{=it.photosphere_avatar_url}}"></a>
                         <p class="post-meta">
                             Observed {{=it.date}} tagged as:
                             {{~it.tags :value:index}}

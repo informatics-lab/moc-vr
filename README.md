@@ -22,8 +22,8 @@ Run the container:
 ```
 docker run -d --name moc-vr \  
     -p 3000:3000 \  
-    -e "AWS_ACCESS_KEY_ID=<YOUR KEY>" \  
-    -e "AWS_SECRET_ACCESS_KEY=<YOUR SECRET>" \  
+    -e "MOC_VR_AWS_ACCESS_KEY_ID=<YOUR KEY>" \  
+    -e "MOC_VR_AWS_SECRET_ACCESS_KEY=<YOUR SECRET>" \  
     moc-vr
 ```  
 Check container is running:  

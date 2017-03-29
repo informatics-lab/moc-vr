@@ -27,7 +27,8 @@ app.use('/img/', proxy('moc-vr.s3-eu-west-1.amazonaws.com/', {
         decorateRequest: function (proxyReq, originalReq) {
             proxyReq.headers["Authorization"] = "";
             proxyReq.headers["Cookie"] = "";
-            proxyReq.method = 'GET';
+            proxyReq.headers["Access-Control-Request-Method"] = "GET";
+            proxyReq.method = "GET";
             return proxyReq;
         }
     })

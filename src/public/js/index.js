@@ -2,8 +2,6 @@
  * Created by tom on 08/02/2017.
  */
 
-// document.getElementsByClassName()
-
 window.onload = function () {
     tagCloud();
     var id = getParameterByName("id");
@@ -73,7 +71,10 @@ function getId(id) {
                 id: result.id.S
             });
             document.getElementById("results").appendChild(container);
-            return
+        })
+        .then(function () {
+            window.location = "#results";
+            return;
         })
         .catch(function (err) {
             console.error(err);
@@ -82,7 +83,7 @@ function getId(id) {
 
 render_tag_result = doT.template(document.getElementById("tag_result").text);
 function getByTag(tag) {
-    fetch("/tag/" + tag, {
+    return fetch("/tag/" + tag, {
         credentials: 'same-origin'
     })
         .then(function (res) {
@@ -109,6 +110,9 @@ function getByTag(tag) {
 
                 document.getElementById("results").appendChild(container);
             }
+        })
+        .then(function () {
+            window.location = "#results";
             return;
         })
         .catch(function (err) {
