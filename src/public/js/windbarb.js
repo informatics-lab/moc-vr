@@ -21,7 +21,7 @@
         .attr({
           height: 2 * arrowWidth,
           width: 2 * arrowWidth,
-          style: "stroke: black"
+          style: "stroke: #B9DC0C; fill: #B9DC0C; stroke-width: 4px;"
         })
       );
       $("svg", container).append(document.createElementNS('http://www.w3.org/2000/svg', 'defs'));

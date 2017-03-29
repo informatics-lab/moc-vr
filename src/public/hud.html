@@ -7,18 +7,17 @@
 </head>
 
 <div id="container"></div>
-<input id="heading" type="range" min="0" max="359" step="1"/>
-<script type="text/javascript" src="js/hud.js"></script>
 <script type="text/javascript" src="js/windbarb.js"></script>
+<script type="text/javascript" src="js/hud.js"></script>
 <link rel="stylesheet" href="css/style.css"/> 
 <script type="text/javascript">
     var data = {
         heading: 240,
         dewPoint: -3.5,
         temperature: 25.8,
-        visibility: 3000,
-        windDirection: 118,
-        windSpeed: 18,
+        visibility: 7000,
+        windDirection: 270,
+        windSpeed: 70,
         windGust: 24
     };
 
@@ -30,28 +29,6 @@
          var canvas = createHUD(data);
          var ctx = canvas.getContext("2d");
          parent.appendChild(canvas);
-
-         var svgdiv = document.createElement('div')
-         svgdiv.className = 'wind-barb';
-         WindBarbArrowHandler.WindArrow(data.windSpeed, data.windDirection, svgdiv, 40)
-
-         var oSerializer = new XMLSerializer();
-         var sXML = oSerializer.serializeToString(svgdiv.getElementsByTagName("svg")[0]);
-         var DOMURL = window.URL || window.webkitURL || window;
-         var img = new Image();
-         var svg = new Blob([sXML], {type: 'image/svg+xml'});
-         var url = DOMURL.createObjectURL(svg);
-         img.onload = function() {
-            ctx.drawImage(img, 75, 60);
-            DOMURL.revokeObjectURL(url);
-        }
-
-         img.src = url;
-
-         var heading = document.getElementById("heading");
-         heading.addEventListener("input", function () {
-             console.log("heading: ", heading.value);
-         });
      };
 </script>
 </body>
