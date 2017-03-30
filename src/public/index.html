@@ -87,7 +87,9 @@
                         <a-scene embedded>
                             <a-camera reverse-mouse-drag="true" >
                                 <a-entity hud="width:0.8; height:0.6; background:#FFF; visibility:{{=it.visibility}}; temperature:{{=it.temperature}}; dewPoint:{{=it.dewPoint}}; windDirection:{{=it.windDirection}}; windSpeed:{{=it.windSpeed}};"
-                                          position="0.1 0.05 -0.65"></a-entity>
+                                          position="0.1 0.05 -0.65"
+                                          visible="false">
+                                </a-entity>
                             </a-camera>
                             <a-assets>
                                 <img id="img_{{=it.id}}" crossorigin="use-credentials" src="{{=it.photosphere_url}}">

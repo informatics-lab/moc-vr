@@ -18,7 +18,7 @@
         temperature: 25.8,
         visibility: 7000,
         windDirection: 270,
-        windSpeed: 70,
+        windSpeed: 76,
         windGust: 24
     };
 
@@ -27,7 +27,7 @@
 
     window.onload = function () {
          var parent = document.getElementById("container");
-         var canvas = createHUD("#FFF", data.visibility, data.temperature, data.dewPoint, data.windDirection, data.windSpeed);
+         var canvas = createHUD(width, height, "#000", data.visibility, data.temperature, data.dewPoint, data.windDirection, data.windSpeed);
          parent.appendChild(canvas);
      };
 </script>

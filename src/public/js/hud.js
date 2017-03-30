@@ -1,4 +1,3 @@
-
 AFRAME.registerComponent('hud', {
     schema: {
         width: {type: 'number', default: 0.8},
@@ -10,26 +9,51 @@ AFRAME.registerComponent('hud', {
         windDirection: {type: 'number'},
         windSpeed: {type: 'number'}
     },
+
+
     /**
      * Initial creation and setting of the mesh.
      */
     init: function () {
-        console.log("stuff");
         var data = this.data;
         var el = this.el;
-        // Create geometry.
-        this.geometry = new THREE.PlaneBufferGeometry(data.width, data.height);
-        // Create material.
-        var canvas = createHUD(data.width * 1000, data.height * 1000, data.background, data.visibility, data.temperature, data.dewPoint, data.windDirection, data.windSpeed);
-        var texture = new THREE.Texture(canvas);
-        texture.needsUpdate = true;
+        var self = this;
+        var isVR = false;
+        var canvasPromise = createHUD(data.width * 1000, data.height * 1000, data.background, data.visibility, data.temperature, data.dewPoint, data.windDirection, data.windSpeed);
 
-        this.material = new THREE.MeshStandardMaterial({map: texture, transparent:true});
-        // Create mesh.
-        this.mesh = new THREE.Mesh(this.geometry, this.material);
-        // Set mesh on entity.
-        el.setObject3D('mesh', this.mesh);
+        canvasPromise.then(function (canvas) {
+            self.geometry = new THREE.PlaneBufferGeometry(data.width, data.height);
+            var texture = new THREE.Texture(canvas);
+            texture.needsUpdate = true;
+            self.material = new THREE.MeshBasicMaterial({map: texture, transparent: true});
+            self.mesh = new THREE.Mesh(self.geometry, self.material);
+            el.setObject3D("mesh", self.mesh);
+        });
+
+        /*
+         * toggles HUD on and off
+         */
+        var scene = document.querySelector("a-scene");
+        scene.addEventListener("enter-vr", function(evt) {
+            console.log("hud:enter-vr", scene.isMobile);
+            if(scene.isMobile) {
+                el.setAttribute("visible", true);
+            }
+            isVR = true;
+        });
+        scene.addEventListener("exit-vr", function(evt) {
+            console.log("hud:exit-vr");
+            el.setAttribute("visible", false);
+            isVR = false;
+        });
+        scene.addEventListener('click', function(evt) {
+            if(scene.isMobile && isVR) {
+                el.setAttribute("visible", !el.getAttribute("visible"));
+            }
+        });
+
     }
+
 });
 
 // returns the hud canvas dom element
@@ -45,15 +69,17 @@ function createHUD(width, height, bg, visibility, temperature, dewPoint, windDir
     drawBackground(ctx, bg);
     drawVisibility(ctx, visibility);
     drawTempInstruments(ctx, temperature, dewPoint);
-    drawWindBarb(ctx, windDirection, windSpeed);
+    return drawWindBarb(ctx, windDirection, windSpeed).then(function(){
+        return canvas;
+    });
 
-    return canvas;
+
 }
 
 function drawBackground(ctx, bg) {
     ctx.fillStyle = bg;
     ctx.globalAlpha = 0.3;
-    ctx.fillRect(30, 0, 170,800);
+    ctx.fillRect(30, 0, 170, 800);
     ctx.globalAlpha = 1.0;
 }
 
@@ -137,33 +163,50 @@ function drawVisibility(ctx, v) {
     ctx.strokeStyle = "#B9DC0C";
     ctx.fillStyle = "#B9DC0C";
     ctx.font = "bold 19px Arial";
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 4;
 
-    if(v < 6000) {
+    if (v < 6000) {
         ctx.fillText(v + " M", 90, 168);
     } else {
-        v = Math.floor(v/1000);
+        v = Math.floor(v / 1000);
         ctx.fillText(v + " KM", 98, 168);
     }
 }
 
 function drawWindBarb(ctx, wd, ws) {
-    var svgdiv = document.createElement('div');
-    svgdiv.className = 'wind-barb';
-    WindBarbArrowHandler.WindArrow(ws, wd, svgdiv, 70);
+    return new Promise(function (resolve, reject) {
 
-    var oSerializer = new XMLSerializer();
-    var sXML = oSerializer.serializeToString(svgdiv.getElementsByTagName("svg")[0]);
-    var DOMURL = window.URL || window.webkitURL || window;
-    var img = new Image();
-    var svg = new Blob([sXML], {type: 'image/svg+xml'});
-    var url = DOMURL.createObjectURL(svg);
-    img.onload = function() {
-        ctx.drawImage(img, 45, 5);
-        DOMURL.revokeObjectURL(url);
-    };
+        if (ws === 0) {
+            drawCalmWindBarb(ctx);
+            resolve();
+        } else {
+            var svgdiv = document.createElement('div');
+            svgdiv.className = 'wind-barb';
+            WindBarbArrowHandler.WindArrow(ws, wd, svgdiv, 70);
+            var oSerializer = new XMLSerializer();
+            var sXML = oSerializer.serializeToString(svgdiv.getElementsByTagName("svg")[0]);
+            var DOMURL = window.URL || window.webkitURL || window;
+            var img = new Image();
+            var svg = new Blob([sXML], {type: 'image/svg+xml'});
+            var url = DOMURL.createObjectURL(svg);
+            img.onload = function () {
+                ctx.drawImage(img, 45, 5);
+                DOMURL.revokeObjectURL(url);
+                resolve();
+            };
+            img.src = url;
+        }
+    });
 
-    img.src = url;
+}
+
+function drawCalmWindBarb(ctx) {
+    ctx.strokeStyle = "#B9DC0C";
+    ctx.lineWidth = 4;
+
+    ctx.beginPath();
+    ctx.arc(117, 90, 30, 0, 2 * Math.PI, false);
+    ctx.stroke();
 }
 
 function getTempRange(top, bottom, t, dp) {
