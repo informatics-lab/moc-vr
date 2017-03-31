@@ -5,7 +5,7 @@ title: home
 
 [[##content:
 <div class="posts">
-    <h1 class="content-subhead">Photosphere Observations Tags</h1>
+    <h1 class="content-subhead">All Photosphere Observation Tags</h1>
     <p class="tag-cloud">
         [[~ model.tags :value:index]]
         <a class="post-category" href="/tag/[[= value]]">[[= value]]</a>

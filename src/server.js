@@ -64,16 +64,22 @@ app.get("/edit/:id", function (req, res) {
                 dateTime: result.dateTime.S,
                 photosphere: img_url,
                 photosphere_original: decodeURIComponent(result.photosphere.S),
-                lidar: decodeURIComponent(result.lidar.S),
-                heading: result.heading.N,
                 tags: result.tags.SS,
                 visibility: result.visibility.N,
                 temperature: result.temperature.N,
                 dewPoint: result.dewPoint.N,
                 windDirection: result.windDirection.N,
                 windSpeed: result.windSpeed.N,
-                windGust: result.windGust.N
             };
+            if(result.lidar){
+                model.lidar = decodeURIComponent(result.lidar.S);
+            }
+            if(result.windGust) {
+                model.windGust = result.windGust.N;
+            }
+            if(result.heading) {
+                model.heading = result.heading.N;
+            }
             return model;
         })
         .then(function (model) {
@@ -157,8 +163,8 @@ app.get("/tag/:tag", function (req, res) {
 });
 
 
-//API endpoints
-app.post("/", function (req, res) {
+//API endpoints should really use 'put' and 'delete' http methods but not supported by html forms.
+app.post("/create", function (req, res) {
 
     // validation
     function validateReq(req) {

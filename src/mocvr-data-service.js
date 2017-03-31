@@ -53,11 +53,11 @@ module.exports = {
             if (typeof(record.l) === 'string') {
                 data.lidar = {S: record.l}
             }
-            if (typeof(record.wg) === 'number') {
+            if (typeof(record.wg) === 'string') {
                 data.windGust = {N: record.wg}
             }
             if (typeof(record.h) === 'number') {
-                data.heading = {N: record.h}
+                data.heading = {N: String(record.h)}
             }
             var params = {
                 Item: data,
@@ -90,11 +90,11 @@ module.exports = {
             if (typeof(record.l) === 'string') {
                 data.lidar = {S: record.l}
             }
-            if (typeof(record.wg) === 'number') {
-                data.windGust = {N: String(record.wg)}
+            if (typeof(record.wg) === 'string') {
+                data.windGust = {N: record.wg}
             }
-            if (typeof(record.h) === 'number') {
-                data.heading = {N: String(record.h)}
+            if (typeof(record.h) === 'string') {
+                data.heading = {N: record.h}
             }
             var params = {
                 Item: data,

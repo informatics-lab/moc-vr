@@ -9,7 +9,7 @@ title: upload
 
     <form ref='uploadForm'
         id='uploadForm'
-        action='/'
+        action='/create'
         method='post'
         encType="multipart/form-data"
         class="pure-form pure-form-aligned"
