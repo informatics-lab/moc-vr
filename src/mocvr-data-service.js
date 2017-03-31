@@ -43,17 +43,21 @@ module.exports = {
                 uploaded: {S: new Date().toISOString()},
                 dateTime: {S: new Date(record.dt).toISOString()},
                 photosphere: {S: record.p},
-                lidar: {S: record.l},
                 windSpeed: {N: record.ws},
                 windDirection: {N: record.wd},
-                windGust: {N: record.wg},
                 temperature: {N: record.t},
                 dewPoint: {N: record.dp},
                 visibility: {N: record.v},
                 tags: {SS: record.tags}
             };
+            if (typeof(record.l) === 'string') {
+                data.lidar = {S: record.l}
+            }
+            if (typeof(record.wg) === 'number') {
+                data.windGust = {N: record.wg}
+            }
             if (typeof(record.h) === 'number') {
-                data.heading = {N: String(record.h)}
+                data.heading = {N: record.h}
             }
             var params = {
                 Item: data,
@@ -69,14 +73,61 @@ module.exports = {
         });
     },
 
-    //TODO
     updateRecord: function(record) {
-
+        return new Promise(function(resolve, reject){
+            var data = {
+                id: {S: record.id},
+                uploaded: {S: new Date().toISOString()},
+                dateTime: {S: new Date(record.dt).toISOString()},
+                photosphere: {S: record.p},
+                windSpeed: {N: record.ws},
+                windDirection: {N: record.wd},
+                temperature: {N: record.t},
+                dewPoint: {N: record.dp},
+                visibility: {N: record.v},
+                tags: {SS: record.tags}
+            };
+            if (typeof(record.l) === 'string') {
+                data.lidar = {S: record.l}
+            }
+            if (typeof(record.wg) === 'number') {
+                data.windGust = {N: String(record.wg)}
+            }
+            if (typeof(record.h) === 'number') {
+                data.heading = {N: String(record.h)}
+            }
+            var params = {
+                Item: data,
+                TableName: table
+            };
+            ddb.putItem(params, function(err, data) {
+                if (!err) {
+                    resolve(data);
+                } else {
+                    reject(err);
+                }
+            });
+        });
     },
 
-    //TODO
     removeRecordById: function(id) {
-
+        return new Promise(function(resolve, reject) {
+            var params = {
+                Key: {
+                    "id": {
+                        S: id
+                    }
+                },
+                TableName: table
+            };
+            ddb.deleteItem(params, function(err, data) {
+                if (!err) {
+                    resolve(data);
+                } else {
+                    reject(err);
+                }
+            });
+        });
     },
 
     findById: function (id) {
@@ -119,7 +170,6 @@ module.exports = {
         });
     },
 
-    //TODO
     findByTag: function(tag) {
         return new Promise(function (resolve, reject) {
             var params = {

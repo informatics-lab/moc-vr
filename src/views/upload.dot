@@ -17,11 +17,6 @@ title: upload
         <fieldset>
 
             <div class="pure-control-group">
-                <label for="uid">ID</label>
-                <input type="text" id="uid" name="uid" />
-            </div>
-
-            <div class="pure-control-group">
                 <label for="p">360&deg; photosphere</label>
                 <input type="file" id="p" name="p"/>
             </div>

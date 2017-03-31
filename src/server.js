@@ -15,7 +15,6 @@ app.set('views', path.join(__dirname, './views'));
 app.set('view engine', 'dot');
 app.use(fileUpload());
 app.use(express.static(__dirname + "/public"));
-
 app.use('/img/', proxy('moc-vr.s3-eu-west-1.amazonaws.com/', {
     decorateRequest: function (proxyReq, originalReq) {
         proxyReq.headers["Authorization"] = "";
@@ -26,6 +25,8 @@ app.use('/img/', proxy('moc-vr.s3-eu-west-1.amazonaws.com/', {
     }
 }));
 
+
+//view endpoints
 app.get("/", function (req, res) {
     dataService.listTags()
         .then(function (data) {
@@ -56,12 +57,15 @@ app.get("/edit/:id", function (req, res) {
     dataService.findById(id)
         .then(function (response) {
             var result = response.Items[0];
-            var img_url = "/img" + result.photosphere.S.split("amazonaws.com")[1];
+            var img_url = "/img" + decodeURIComponent(result.photosphere.S).split("amazonaws.com")[1];
             var model = {
                 id: result.id.S,
                 uploadDateTime: new Date(result.uploaded.S).toDateString(),
                 dateTime: result.dateTime.S,
                 photosphere: img_url,
+                photosphere_original: decodeURIComponent(result.photosphere.S),
+                lidar: decodeURIComponent(result.lidar.S),
+                heading: result.heading.N,
                 tags: result.tags.SS,
                 visibility: result.visibility.N,
                 temperature: result.temperature.N,
@@ -91,7 +95,7 @@ app.get("/view/:id", function (req, res) {
         dataService.findById(id)
             .then(function (response) {
                 var result = response.Items[0];
-                var img_url = "/img" + result.photosphere.S.split("amazonaws.com")[1];
+                var img_url = "/img" + decodeURIComponent(result.photosphere.S).split("amazonaws.com")[1];
                 var model = {
                     id: result.id.S,
                     dateTime: new Date(result.dateTime.S).toDateString(),
@@ -252,15 +256,19 @@ app.post("/", function (req, res) {
 
 });
 
-app.put("/:id", function (req, res) {
+app.post("/update/:id", function (req, res) {
     var id = req.params.id.trim();
 
     // validation
     function validateReq(req) {
         return new Promise(function (resolve, reject) {
 
-            if (!req.body.uid) {
-                reject("missing id");
+            if (!req.body.p) {
+                reject("missing photosphere");
+            }
+
+            if (!req.body.l) {
+                reject("missing lidar");
             }
 
             if (!req.body.dt) {
@@ -321,18 +329,21 @@ app.put("/:id", function (req, res) {
 
 });
 
-app.delete("/:id", function (req, res) {
+app.get("/delete/:id", function (req, res) {
     var id = req.params.id.trim();
     dataService.removeRecordById(id)
         .then(function () {
-
+            res.writeHead(301, {Location: "/"});
+            res.end();
         })
         .catch(function (err) {
-            console.error(err)
+            console.error(err);
             res.status(500).send(err);
         });
 });
 
+
+//server init
 app.listen(3000, function () {
     console.log("Express server listening on port 3000");
 });

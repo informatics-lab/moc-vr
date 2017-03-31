@@ -9,8 +9,8 @@ title: edit
 
     <form ref='editForm'
         id='editForm'
-        action='/[[= model.id]]'
-        method='put'
+        action='/update/[[= model.id]]'
+        method='post'
         encType="multipart/form-data"
         class="pure-form pure-form-aligned"
     >
@@ -23,6 +23,10 @@ title: edit
 
             <br />
             <br />
+
+            <input type="text" name="p" id="p" value="[[= model.photosphere_original]]"/>
+            <input type="text" name="l" id="l" value="[[= model.lidar]]"/>
+            <input type="number" name="h" id="h" value="[[= model.heading]]"/>
 
             <div class="pure-control-group">
                 <label for="dt">date time</label>
@@ -73,8 +77,8 @@ title: edit
 
             <div class="pure-controls">
                 <button type="submit" class="pure-button pure-button-primary">edit</button>
-                <button type="submit" class="pure-button ">cancel</button>
-                <button type="submit" class="pure-button ">delete</button>
+                <a class="pure-button" href="/view/[[= model.id]]">cancel</a>
+                <a class="pure-button" href="/delete/[[= model.id]]" onclick="return confirm('Are you sure?')">delete</a>
             </div>
 
         </fieldset>
