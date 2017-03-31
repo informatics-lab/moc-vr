@@ -1,0 +1,32 @@
+---
+layout: master.dot
+title: find
+---
+
+[[##content:
+<div class="posts">
+    <h1 class="content-subhead">Related Tags</h1>
+    <p class="tag-cloud">
+        [[~ model.relatedTags :value:index]]
+        <a class="post-category[[? value === model.tag]] active-tag[[?]]" href="/tag/[[= value]]">[[= value]]</a>
+        [[~]]
+    </p>
+    <br />
+
+    <h1 class="content-subhead">Matching Photosphere Observations</h1>
+    [[~ model.matchingObs :value:index]]
+    <div class="post">
+            <a href="/view/[[= value.id]]" title="view">
+                <img class="post-avatar" crossorigin="use-credentials" src="[[= value.photosphere]]-small">
+            </a>
+            <p class="post-meta">
+                Observed [[= value.dateTime]] tagged as:
+                [[~ value.tags :val:i]]
+                <a class="post-category[[? val === model.tag]] active-tag[[?]]" href="/tag/[[= val]]">[[= val]]</a>
+                [[~]]
+            </p>
+    </div>
+    [[~]]
+
+</div>
+#]]

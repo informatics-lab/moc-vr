@@ -1,0 +1,43 @@
+---
+layout: master.dot
+title: view
+---
+
+[[##remotejs:
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/aframe/0.5.0/aframe.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+#]]
+
+[[##content:
+<div class = "posts">
+    <h1 class="content-subhead">Photosphere Observation</h1>
+    <div class="post">
+        <p class="post-meta">
+            <a href="/edit/[[= model.id]]" title="edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+            Observed [[= model.dateTime]] tagged as:
+            [[~ model.tags :value:index]]
+            <a class="post-category" href="/tag/[[= value]]">[[= value]]</a>
+            [[~]]
+        </p>
+        <br />
+        <script type="text/javascript" src="/js/hud/windbarb.js"></script>
+        <script type="text/javascript" src="/js/hud/hud.js"></script>
+
+        <a-scene embedded>
+            <a-camera reverse-mouse-drag="true" >
+                <a-entity hud="width:0.8; height:0.6; background:#FFF; visibility:[[= model.visibility]]; temperature:[[= model.temperature]]; dewPoint:[[= model.dewPoint]]; windDirection:[[= model.windDirection]]; windSpeed:[[= model.windSpeed]];"
+                                      position="0.1 0.05 -0.65"
+                                      visible="false">
+                </a-entity>
+            </a-camera>
+            <a-assets>
+                <img id="img_[[= model.id]]" crossorigin="use-credentials" src="[[= model.photosphere]]">
+            </a-assets>
+            <a-sky src="#img_[[= model.id]]"></a-sky>
+        </a-scene>
+
+    </div>
+</div>
+#]]
+

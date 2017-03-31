@@ -1,0 +1,85 @@
+---
+layout: master.dot
+title: upload
+---
+
+[[##content:
+<div class = "posts">
+    <h1 class="content-subhead">Upload Photosphere Observation</h1>
+
+    <form ref='uploadForm'
+        id='uploadForm'
+        action='/create'
+        method='post'
+        encType="multipart/form-data"
+        class="pure-form pure-form-aligned"
+    >
+        <fieldset>
+
+            <div class="pure-control-group">
+                <label for="p">360&deg; photosphere</label>
+                <input type="file" id="p" name="p"/>
+            </div>
+
+            <div class="pure-control-group">
+                <label for="cbh">cloud base height</label>
+                <input type="file" id="cbh" name="cbh"/>
+            </div>
+
+            <br/>
+
+            <div class="pure-control-group">
+                <label for="dt">date time</label>
+                <input type="datetime-local" name="dt" id="dt">
+            </div>
+
+            <div class="pure-control-group">
+                <label for="wd">wind direction</label>
+                <input type="number" id="wd" name="wd"/>
+                <span class="pure-form-message-inline">10m average</span>
+            </div>
+
+            <div class="pure-control-group">
+                <label for="ws">wind speed</label>
+                <input type="number" id="ws" name="ws"/>
+                <span class="pure-form-message-inline">10m average</span>
+            </div>
+
+            <div class="pure-control-group">
+                <label for="wg">wind gust</label>
+                <input type="number" id="wg" name="wg"/>
+                <span class="pure-form-message-inline">10m average</span>
+            </div>
+
+            <div class="pure-control-group">
+                <label for="t">temperature</label>
+                <input type="number" step="0.1" id="t" name="t"/>
+                <span class="pure-form-message-inline">&deg;C</span>
+            </div>
+
+            <div class="pure-control-group">
+                <label for="dp">dew point</label>
+                <input type="number" step="0.1" id="dp" name="dp"/>
+                <span class="pure-form-message-inline">&deg;C</span>
+            </div>
+
+            <div class="pure-control-group">
+                <label for="v">visibility</label>
+                <input type="number" id="v" name="v" min="10"/>
+                <span class="pure-form-message-inline">m</span>
+            </div>
+
+            <div class="pure-control-group">
+                <label for="tags">tags</label>
+                <input type="text" id="tags" name="tags" placeholder="cirrus, exeter, uk"/>
+                <span class="pure-form-message-inline">comma separated list</span>
+            </div>
+
+            <div class="pure-controls">
+                <button type="submit" class="pure-button pure-button-primary">upload</button>
+            </div>
+
+        </fieldset>
+    </form>
+</div>
+#]]

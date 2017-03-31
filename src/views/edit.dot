@@ -1,0 +1,87 @@
+---
+layout: master.dot
+title: edit
+---
+
+[[##content:
+<div class = "posts">
+    <h1 class="content-subhead">Edit Photosphere Observation</h1>
+
+    <form ref='editForm'
+        id='editForm'
+        action='/update/[[= model.id]]'
+        method='post'
+        encType="multipart/form-data"
+        class="pure-form pure-form-aligned"
+    >
+        <fieldset>
+
+            <p class="post-meta">Last Editted [[= model.uploadDateTime]]</p>
+
+            <br />
+            <img src="[[= model.photosphere]]-medium" />
+
+            <br />
+            <br />
+
+            <input type="hidden" name="p" id="p" value="[[= model.photosphere_original]]"/>
+            <input type="hidden" name="l" id="l" value="[[= model.lidar]]"/>
+            <input type="hidden" name="h" id="h" value="[[= model.heading]]"/>
+
+            <div class="pure-control-group">
+                <label for="dt">date time</label>
+                <input type="text" name="dt" id="dt" value="[[= model.dateTime]]"/>
+            </div>
+
+            <div class="pure-control-group">
+                <label for="wd">wind direction</label>
+                <input type="number" id="wd" name="wd" value="[[= model.windDirection]]"/>
+                <span class="pure-form-message-inline">10m average</span>
+            </div>
+
+            <div class="pure-control-group">
+                <label for="ws">wind speed</label>
+                <input type="number" id="ws" name="ws" value="[[= model.windSpeed]]"/>
+                <span class="pure-form-message-inline">10m average</span>
+            </div>
+
+            <div class="pure-control-group">
+                <label for="wg">wind gust</label>
+                <input type="number" id="wg" name="wg" value="[[= model.windGust]]"/>
+                <span class="pure-form-message-inline">10m average</span>
+            </div>
+
+            <div class="pure-control-group">
+                <label for="t">temperature</label>
+                <input type="number" step="0.1" id="t" name="t" value="[[= model.temperature]]"/>
+                <span class="pure-form-message-inline">&deg;C</span>
+            </div>
+
+            <div class="pure-control-group">
+                <label for="dp">dew point</label>
+                <input type="number" step="0.1" id="dp" name="dp" value="[[= model.dewPoint]]"/>
+                <span class="pure-form-message-inline">&deg;C</span>
+            </div>
+
+            <div class="pure-control-group">
+                <label for="v">visibility</label>
+                <input type="number" id="v" name="v" min="10" value="[[= model.visibility]]"/>
+                <span class="pure-form-message-inline">m</span>
+            </div>
+
+            <div class="pure-control-group">
+                <label for="tags">tags</label>
+                <input type="text" id="tags" name="tags" placeholder="cirrus, exeter, uk" value="[[= model.tags]]"/>
+                <span class="pure-form-message-inline">comma separated list</span>
+            </div>
+
+            <div class="pure-controls">
+                <button type="submit" class="pure-button pure-button-primary">edit</button>
+                <a class="pure-button" href="/view/[[= model.id]]">cancel</a>
+                <a class="pure-button" href="/delete/[[= model.id]]" onclick="return confirm('Are you sure?')">delete</a>
+            </div>
+
+        </fieldset>
+    </form>
+</div>
+#]]

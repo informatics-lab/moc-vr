@@ -196,6 +196,7 @@ h3 {
     }
 }
 
+
 /*
  * Reposition the vr goggles icon to top right.
  */
@@ -233,8 +234,14 @@ h3 {
     margin-bottom: 2px;
 }
 
-#search p {
+.tag-cloud {
     text-align: center;
+}
+
+.active-tag {
+    text-decoration: none;
+    background-color: #2A2A2A;
+    color: #B9DC0C;
 }
 
 .post-category:hover {
@@ -263,4 +270,14 @@ canvas.a-canvas {
 
 canvas.a-grab-cursor {
     padding: 0px 0px 0px 0px !important;
+}
+
+/*
+ * remove underline from buttons
+ */
+a.pure-button:hover {
+    text-decoration: none;
+}
+a.pure-button:active {
+    text-decoration: none;
 }
