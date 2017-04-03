@@ -26,8 +26,8 @@ title: view
 
         <a-scene embedded>
             <a-camera reverse-mouse-drag="true" >
-                <a-entity hud="width:0.8; height:0.6; background:#FFF; visibility:[[= model.visibility]]; temperature:[[= model.temperature]]; dewPoint:[[= model.dewPoint]]; windDirection:[[= model.windDirection]]; windSpeed:[[= model.windSpeed]];"
-                                      position="0.1 0.05 -0.65"
+                <a-entity hud="width:0.7; height:0.6; background:#FFF; visibility:[[= model.visibility]]; temperature:[[= model.temperature]]; dewPoint:[[= model.dewPoint]]; windDirection:[[= model.windDirection]]; windSpeed:[[= model.windSpeed]]; lidar:[[= model.lidar]]"
+                                      position="0 0 -0.65"
                                       visible="false">
                 </a-entity>
             </a-camera>
@@ -40,4 +40,3 @@ title: view
     </div>
 </div>
 #]]
-
