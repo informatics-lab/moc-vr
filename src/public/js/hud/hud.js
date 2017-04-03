@@ -7,7 +7,8 @@ AFRAME.registerComponent('hud', {
         temperature: {type: 'number'},
         dewPoint: {type: 'number'},
         windDirection: {type: 'number'},
-        windSpeed: {type: 'number'}
+        windSpeed: {type: 'number'},
+        lidar: {type: 'string'}
     },
 
 
@@ -19,15 +20,26 @@ AFRAME.registerComponent('hud', {
         var el = this.el;
         var self = this;
         var isVR = false;
-        var canvasPromise = createHUD(data.width * 1000, data.height * 1000, data.background, data.visibility, data.temperature, data.dewPoint, data.windDirection, data.windSpeed);
+        self.views = [null]; // The avaliable HUD views. null = hidden.
+        self.currentView = null;
 
-        canvasPromise.then(function (canvas) {
-            self.geometry = new THREE.PlaneBufferGeometry(data.width, data.height);
-            var texture = new THREE.Texture(canvas);
-            texture.needsUpdate = true;
-            self.material = new THREE.MeshBasicMaterial({map: texture, transparent: true});
-            self.mesh = new THREE.Mesh(self.geometry, self.material);
-            el.setObject3D("mesh", self.mesh);
+
+        var createdViews = [];
+        createdViews.push(createHUD(data.width * 1000, data.height * 1000,
+             data.background, data.visibility, data.temperature, data.dewPoint,
+             data.windDirection, data.windSpeed, data.lidar));
+
+        if(data.lidar){
+            createdViews.push(createLidar(data.width * 1000, data.height * 1000, data.lidar));
+        }
+
+        Promise.all(createdViews).then(function(views) {
+            views.forEach(function(canvas){
+                self.views.push(self.makeMesh(canvas));
+            });
+            if(el.getAttribute('visible')){
+                self.toggleMode();
+            }
         });
 
         /*
@@ -48,13 +60,35 @@ AFRAME.registerComponent('hud', {
         });
         scene.addEventListener('click', function(evt) {
             if(scene.isMobile && isVR) {
-                el.setAttribute("visible", !el.getAttribute("visible"));
+                self.toggleMode();
             }
         });
 
+    },
+
+    toggleMode: function(){
+        var nextViewIndex = this.views.indexOf(this.currentView) + 1;
+        nextViewIndex = (nextViewIndex >= this.views.length)? 0 : nextViewIndex;
+        var view = this.views[nextViewIndex];
+        if(view === null){
+            this.el.setAttribute("visible", false);
+        }  else {
+            this.el.setObject3D("mesh", view);
+            this.el.setAttribute("visible", true);
+        }
+        this.currentView = view;
+    },
+
+    makeMesh: function(canvas){
+        var geometry = new THREE.PlaneBufferGeometry(this.data.width, this.data.height);
+        var texture = new THREE.Texture(canvas);
+        texture.needsUpdate = true;
+        var material = new THREE.MeshBasicMaterial({map: texture, transparent: true});
+        return new THREE.Mesh(geometry, material);
     }
 
 });
+
 
 // returns the hud canvas dom element
 function createHUD(width, height, bg, visibility, temperature, dewPoint, windDirection, windSpeed) {
@@ -63,16 +97,69 @@ function createHUD(width, height, bg, visibility, temperature, dewPoint, windDir
     var canvas = document.createElement("canvas");
     canvas.width = width;
     canvas.height = height;
-    // canvas.setAttribute("style", "border:black 1px solid");
+    canvas.setAttribute("style", "border:black 1px solid");
 
     var ctx = canvas.getContext("2d");
+    // Shift everything to the down and right.
+    ctx.translate(canvas.width * 0.3, 0);
+
     drawBackground(ctx, bg);
     drawVisibility(ctx, visibility);
     drawTempInstruments(ctx, temperature, dewPoint);
-    return drawWindBarb(ctx, windDirection, windSpeed).then(function(){
+
+    var asynActions = [drawWindBarb(ctx, windDirection, windSpeed)];
+
+    return Promise.all(asynActions).then(function(){
         return canvas;
     });
 
+
+}
+
+// returns the lidar image canvas dom element
+function createLidar(width, height, img) {
+    console.log("creating lidar");
+
+    var canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+
+    var ctx = canvas.getContext("2d");
+
+    ctx.beginPath();
+    ctx.rect(0, 0, width, height);
+    ctx.fillStyle = "red";
+    ctx.fill();
+
+    return addLidar(ctx, img).then(function(){
+        return canvas;
+    });
+}
+
+function addLidar(ctx, lidar){
+    return new Promise(function(resolve, reject){
+        var img = new Image();
+        img.addEventListener('load',function () {
+            var xOffset = 0;
+            var yOffset = 0;
+
+            var ctxW = ctx.canvas.width - 2 * xOffset;
+            var ctxH = ctx.canvas.height;
+            var ctxAspect = ctxW/ctxH;
+
+            var imgAspect = img.width/img.height
+            var scale = (imgAspect > ctxAspect)?  ctxW / img.width : ctxH / img.height;
+            var targetW = scale * img.width;
+            var targetH = scale * img.height;
+
+            xOffset = (targetW < ctxW) ? (ctxW - targetW) / 2 : xOffset;
+            yOffset = (targetH < ctxH) ? (ctxH - targetH) / 2 : yOffset;
+            ctx.drawImage(img, xOffset, yOffset, targetW, targetH);
+            resolve();
+        });
+        img.addEventListener('error', reject);
+        img.src = lidar;
+    });
 
 }
 

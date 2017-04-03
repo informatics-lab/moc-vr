@@ -96,16 +96,21 @@ app.get("/upload", function (req, res) {
 });
 
 app.get("/view/:id", function (req, res) {
+    function convertS3URL(url){
+        return "/img" + decodeURIComponent(url).split("amazonaws.com")[1];
+    }
     var id = req.params.id.trim();
     if (id && id != "") {
         dataService.findById(id)
             .then(function (response) {
                 var result = response.Items[0];
-                var img_url = "/img" + decodeURIComponent(result.photosphere.S).split("amazonaws.com")[1];
+                var img_url =  convertS3URL(result.photosphere.S);
+                var lidar_url = (result.lidar) ? convertS3URL(result.lidar.S) : "";
                 var model = {
                     id: result.id.S,
                     dateTime: new Date(result.dateTime.S).toDateString(),
                     photosphere: img_url,
+                    lidar: lidar_url,
                     tags: result.tags.SS,
                     visibility: result.visibility.N,
                     temperature: result.temperature.N,
