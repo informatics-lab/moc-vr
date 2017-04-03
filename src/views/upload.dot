@@ -22,8 +22,9 @@ title: upload
             </div>
 
             <div class="pure-control-group">
-                <label for="cbh">cloud base height</label>
-                <input type="file" id="cbh" name="cbh"/>
+                <label for="l">cloud base height</label>
+                <input type="file" id="l" name="l"/>
+                <span class="pure-form-message-inline">(optional)</span>
             </div>
 
             <br/>
@@ -36,19 +37,19 @@ title: upload
             <div class="pure-control-group">
                 <label for="wd">wind direction</label>
                 <input type="number" id="wd" name="wd"/>
-                <span class="pure-form-message-inline">10m average</span>
+                <span class="pure-form-message-inline">kn 10m average</span>
             </div>
 
             <div class="pure-control-group">
                 <label for="ws">wind speed</label>
                 <input type="number" id="ws" name="ws"/>
-                <span class="pure-form-message-inline">10m average</span>
+                <span class="pure-form-message-inline">kn 10m average</span>
             </div>
 
             <div class="pure-control-group">
                 <label for="wg">wind gust</label>
                 <input type="number" id="wg" name="wg"/>
-                <span class="pure-form-message-inline">10m average</span>
+                <span class="pure-form-message-inline">kn 10m average (optional)</span>
             </div>
 
             <div class="pure-control-group">

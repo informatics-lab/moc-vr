@@ -71,13 +71,13 @@ app.get("/edit/:id", function (req, res) {
                 windDirection: result.windDirection.N,
                 windSpeed: result.windSpeed.N,
             };
-            if(result.lidar){
+            if (result.lidar) {
                 model.lidar = decodeURIComponent(result.lidar.S);
             }
-            if(result.windGust) {
+            if (result.windGust) {
                 model.windGust = result.windGust.N;
             }
-            if(result.heading) {
+            if (result.heading) {
                 model.heading = result.heading.N;
             }
             return model;
@@ -168,7 +168,7 @@ app.get(/\/tag\/([- _a-z%A-Z0-9\/]*)\/?$/, function (req, res) {
 });
 
 
-//API endpoints should really use 'put' and 'delete' http methods but not supported by html forms.
+//API endpoints - should really use 'put' and 'delete' http methods but not supported by html forms.
 app.post("/create", function (req, res) {
 
     // validation
@@ -177,10 +177,6 @@ app.post("/create", function (req, res) {
 
             if (!req.files.p) {
                 reject("missing photosphere");
-            }
-
-            if (!req.files.cbh) {
-                reject("missing cloud base height");
             }
 
             if (!req.body.dt) {
@@ -193,10 +189,6 @@ app.post("/create", function (req, res) {
 
             if (!req.body.wd) {
                 reject("missing wind direction");
-            }
-
-            if (!req.body.wg) {
-                reject("missing wind gust")
             }
 
             if (!req.body.t) {
@@ -217,9 +209,13 @@ app.post("/create", function (req, res) {
             });
             req.body.tags = tags;
 
+            // optional wind gust
+            if (req.body.wg.trim() === "") {
+                delete req.body.wg;
+            }
+
             resolve(req);
         });
-
 
     }
 
@@ -239,21 +235,25 @@ app.post("/create", function (req, res) {
         .then(function (req) {
             var id = uuid.v4();
 
-            Promise.all([dataService.insertFile(id, req.files.p, "photosphere"), dataService.insertFile(id, req.files.cbh, "lidar")])
+            Promise.all([dataService.insertFile(id, req.files.p, "photosphere"), dataService.insertFile(id, req.files.l, "lidar")])
                 .then(function (resultArray) {
                     var obj = Object.assign({
                         id: id,
-                        p: resultArray[0].Location,
-                        l: resultArray[1].Location,
-                        h: getHeading(req.files.p)
+                        p: resultArray[0].Location
                     }, req.body);
+                    if (resultArray[1]) {
+                        obj.l = resultArray[1].Location
+                    }
+                    var heading = getHeading(req.files.p);
+                    if (heading) {
+                        obj.h = heading;
+                    }
                     return dataService.insertRecord(obj);
                 })
                 .then(function () {
-                    // redirect back to index ??
+                    //TODO return created response and redirect to new resource
                     res.writeHead(301, {Location: "/view/" + id});
                     res.end();
-                    // res.status(201).location("/index.html?id="+id);
                 })
                 .catch(function (err) {
                     console.error(err);
@@ -278,10 +278,6 @@ app.post("/update/:id", function (req, res) {
                 reject("missing photosphere");
             }
 
-            if (!req.body.l) {
-                reject("missing lidar");
-            }
-
             if (!req.body.dt) {
                 reject("missing date time");
             }
@@ -292,10 +288,6 @@ app.post("/update/:id", function (req, res) {
 
             if (!req.body.wd) {
                 reject("missing wind direction");
-            }
-
-            if (!req.body.wg) {
-                reject("missing wind gust")
             }
 
             if (!req.body.t) {
@@ -315,6 +307,21 @@ app.post("/update/:id", function (req, res) {
                 tags.push(tag.trim().toLowerCase());
             });
             req.body.tags = tags;
+
+            // optional lidar
+            if (req.body.l.trim() == "") {
+                delete req.body.l;
+            }
+
+            // optional wind gust
+            if (req.body.wg.trim() == "") {
+                delete req.body.l;
+            }
+
+            // optional heading
+            if (req.body.h.trim() == "") {
+                delete req.body.h;
+            }
 
             resolve(req);
         });
