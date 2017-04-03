@@ -156,6 +156,9 @@ app.get(/\/tag\/([- _a-z%A-Z0-9\/]*)\/?$/, function (req, res) {
                 });
                 model.matchingObs.push(ob);
             });
+            if (model.matchingObs.length === 1){
+                delete model.relatedTags;
+            }
             return model;
         })
         .then(function (model) {

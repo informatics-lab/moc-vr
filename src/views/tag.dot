@@ -5,6 +5,7 @@ title: find
 
 [[##content:
 <div class="posts">
+    [[? model.relatedTags ]]
     <h1 class="content-subhead">Related Tags</h1>
     <p class="tag-cloud">
         [[~ model.relatedTags :val:i]]
@@ -20,6 +21,7 @@ title: find
         [[~]]
     </p>
     <br />
+    [[?]]
 
     <h1 class="content-subhead">Matching Photosphere Observations</h1>
     [[~ model.matchingObs :value:index]]
