@@ -19,21 +19,25 @@ var bucket = "moc-vr";
 module.exports = {
 
     insertFile: function (id, file, name) {
-        return new Promise(function (resolve, reject) {
-            var params = {
-                Bucket: bucket,
-                Key: "obs/" + id + "/" + name,
-                Body: file.data,
-                ContentType: file.mimetype
-            };
-            s3.upload(params, function (err, data) {
-                if (!err) {
-                    resolve(data);
-                } else {
-                    reject(err);
-                }
+        if (!file) {
+            return Promise.resolve(null);
+        } else {
+            return new Promise(function (resolve, reject) {
+                var params = {
+                    Bucket: bucket,
+                    Key: "obs/" + id + "/" + name,
+                    Body: file.data,
+                    ContentType: file.mimetype
+                };
+                s3.upload(params, function (err, data) {
+                    if (!err) {
+                        resolve(data);
+                    } else {
+                        reject(err);
+                    }
+                });
             });
-        });
+        }
     },
 
     insertRecord: function (record) {
@@ -73,8 +77,8 @@ module.exports = {
         });
     },
 
-    updateRecord: function(record) {
-        return new Promise(function(resolve, reject){
+    updateRecord: function (record) {
+        return new Promise(function (resolve, reject) {
             var data = {
                 id: {S: record.id},
                 uploaded: {S: new Date().toISOString()},
@@ -100,7 +104,7 @@ module.exports = {
                 Item: data,
                 TableName: table
             };
-            ddb.putItem(params, function(err, data) {
+            ddb.putItem(params, function (err, data) {
                 if (!err) {
                     resolve(data);
                 } else {
@@ -110,8 +114,8 @@ module.exports = {
         });
     },
 
-    removeRecordById: function(id) {
-        return new Promise(function(resolve, reject) {
+    removeRecordById: function (id) {
+        return new Promise(function (resolve, reject) {
             var params = {
                 Key: {
                     "id": {
@@ -120,7 +124,7 @@ module.exports = {
                 },
                 TableName: table
             };
-            ddb.deleteItem(params, function(err, data) {
+            ddb.deleteItem(params, function (err, data) {
                 if (!err) {
                     resolve(data);
                 } else {
@@ -153,7 +157,7 @@ module.exports = {
         });
     },
 
-    listTags: function() {
+    listTags: function () {
         return new Promise(function (resolve, reject) {
             var params = {
                 TableName: table,
@@ -170,15 +174,15 @@ module.exports = {
         });
     },
 
-    findByTags: function(tags) {
+    findByTags: function (tags) {
         return new Promise(function (resolve, reject) {
             var expressionAttributeValues = {};
             var filterExpressions = [];
             for (var i = 0; i < tags.length; i++) {
                 var tag = tags[i];
                 var key = ":tag" + i;
-                expressionAttributeValues[key] = {'S':tag};
-                filterExpressions.push('contains(tags, ' + key +')');
+                expressionAttributeValues[key] = {'S': tag};
+                filterExpressions.push('contains(tags, ' + key + ')');
             }
             var filterExpression = filterExpressions.join(" and ");
 
