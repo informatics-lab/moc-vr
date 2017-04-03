@@ -28,7 +28,6 @@ app.use('/img/', proxy('moc-vr.s3-eu-west-1.amazonaws.com/', {
 
 //view endpoints
 app.get("/", function (req, res) {
-    console.log('in /');
     dataService.listTags()
         .then(function (data) {
             var allTags = [];

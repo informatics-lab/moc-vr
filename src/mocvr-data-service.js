@@ -172,15 +172,15 @@ module.exports = {
 
     findByTags: function(tags) {
         return new Promise(function (resolve, reject) {
-            let expressionAttributeValues = {};
-            let filterExpressions = [];
-            for (let i = 0; i < tags.length; i++) {
-                let tag = tags[i];
-                let key = ":tag" + i;
+            var expressionAttributeValues = {};
+            var filterExpressions = [];
+            for (var i = 0; i < tags.length; i++) {
+                var tag = tags[i];
+                var key = ":tag" + i;
                 expressionAttributeValues[key] = {'S':tag};
                 filterExpressions.push('contains(tags, ' + key +')');
             }
-            let filterExpression = filterExpressions.join(" and ");
+            var filterExpression = filterExpressions.join(" and ");
 
             var params = {
                 TableName: table,
