@@ -35,26 +35,70 @@ AFRAME.registerComponent('hud', {
          */
         var scene = document.querySelector("a-scene");
         scene.addEventListener("enter-vr", function(evt) {
-            console.log("hud:enter-vr", scene.isMobile);
-            if(scene.isMobile) {
+            startTimeEvent("VR", "VR", "In VR");
+            if(ga){
+                ga('send', 'event', "VR", "Enter VR");
+            }
+            if(true || scene.isMobile) {
                 el.setAttribute("visible", true);
+                startTimeEvent("HUD", "VR", "Showing HUD");
+            } else {
+                startTimeEvent("HUD", "VR", "No HUD");
             }
             isVR = true;
         });
         scene.addEventListener("exit-vr", function(evt) {
-            console.log("hud:exit-vr");
+            stopTimeEvent("VR");
+            if(ga){
+                ga('send', 'event', "VR", "Exit VR");
+            }
             el.setAttribute("visible", false);
             isVR = false;
         });
         scene.addEventListener('click', function(evt) {
-            if(scene.isMobile && isVR) {
-                el.setAttribute("visible", !el.getAttribute("visible"));
+            if((true || scene.isMobile) && isVR) {
+                stopTimeEvent("HUD");
+                if(el.getAttribute("visible")){
+                    startTimeEvent("HUD", "VR", "No HUD");
+                    el.setAttribute("visible", false);
+                } else {
+                    startTimeEvent("HUD", "VR", "Showing HUD");
+                    el.setAttribute("visible", true);
+                }
             }
         });
 
     }
 
 });
+
+var analyticsEventTimmers = {};
+function stopTimeEvent(id){
+    try{
+        timer = analyticsEventTimmers[id];
+        if(timer){
+            var time = (new Date() - timer.date) / 1000;
+            delete analyticsEventTimmers[id];
+            ga('send', 'timing', timer['cat'], timer['label'], time);
+        } else {
+            console.error('No timer found for: ', stop);
+        }
+    } catch (e){ // Let's be fault tolorant in our analytics.
+        console.error('Error in stopTimeEvent', e);
+    }
+}
+
+function startTimeEvent(id, cat, label){
+    try{
+        analyticsEventTimmers[id] = {
+            date:new Date(),
+            cat:cat,
+            label:label
+        };
+    } catch (e){ // Let's be fault tolorant in our analytics.
+        console.error('Error in stopTimeEvent', e);
+    }
+}
 
 // returns the hud canvas dom element
 function createHUD(width, height, bg, visibility, temperature, dewPoint, windDirection, windSpeed) {
