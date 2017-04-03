@@ -125,16 +125,21 @@ app.get("/view/:id", function (req, res) {
     }
 });
 
-//TODO multi tag navigation using regex /\/tag\/([a-zA-Z0-9\/]*)/
-app.get("/tag/:tag", function (req, res) {
-    var tag = req.params.tag.trim();
-    dataService.findByTag(tag)
+// If you are `searching`` for no tags then redirect to home
+app.get(/^\/tag\/?$/, function (req, res) {
+    res.redirect('/');
+});
+
+app.get(/\/tag\/([- _a-z%A-Z0-9\/]*)\/?$/, function (req, res) {
+    var tags = req.params[0].replace(/\/\s*$/, "").split('/');
+    dataService.findByTags(tags)
         .then(function (response) {
             var results = response.Items;
             var model = {
-                tag: tag,
+                tags: tags,
                 matchingObs: [],
-                relatedTags: []
+                relatedTags: [],
+                currentUrl: decodeURI(req.path)
             };
             results.forEach(function (result) {
                 var img_url = "/img" + result.photosphere.S.split("amazonaws.com")[1];
@@ -353,4 +358,3 @@ app.get("/delete/:id", function (req, res) {
 app.listen(3000, function () {
     console.log("Express server listening on port 3000");
 });
-

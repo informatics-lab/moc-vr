@@ -170,17 +170,23 @@ module.exports = {
         });
     },
 
-    findByTag: function(tag) {
+    findByTags: function(tags) {
         return new Promise(function (resolve, reject) {
+            var expressionAttributeValues = {};
+            var filterExpressions = [];
+            for (var i = 0; i < tags.length; i++) {
+                var tag = tags[i];
+                var key = ":tag" + i;
+                expressionAttributeValues[key] = {'S':tag};
+                filterExpressions.push('contains(tags, ' + key +')');
+            }
+            var filterExpression = filterExpressions.join(" and ");
+
             var params = {
                 TableName: table,
                 Select: "ALL_ATTRIBUTES",
-                ExpressionAttributeValues: {
-                    ":tag": {
-                        S: tag
-                    }
-                },
-                FilterExpression: "contains(tags, :tag)"
+                ExpressionAttributeValues: expressionAttributeValues,
+                FilterExpression: filterExpression
             };
             ddb.scan(params, function (err, data) {
                 if (!err) {
