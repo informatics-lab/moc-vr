@@ -61,7 +61,7 @@ AFRAME.registerComponent('hud-toggler', {
         if(this.state.isFirst){
             this.initListeners();
         }
-        this.isFirst = false;
+        this.state.isFirst = false;
     },
 
     initListeners: function(){
@@ -80,7 +80,7 @@ AFRAME.registerComponent('hud-toggler', {
         });
 
         scene.addEventListener('click', function(evt) {
-            if(self.isVR && scene.isMobile) {
+            if(self.isVR && scene.isMobile){
                 self.toggleHUD();
             }
         });
@@ -96,10 +96,13 @@ AFRAME.registerComponent('hud-toggler', {
         this.toggleHUD(0);
     },
 
-    toggleHUD: function(i){
-        i = (!isNaN(i) && i >=0 && i < this.state.huds.length) ? i : this.state.current;
-        var current = this.state.huds[i];
-        var indexNext = (i >= this.state.huds.length - 1) ? 0 : i + 1;
+    toggleHUD: function(indexNext){
+        var current = this.state.huds[this.state.current];
+        if(isNaN(indexNext) || indexNext < 0  || indexNext >= this.state.huds.length){
+            indexNext = this.state.current + 1;
+            indexNext = (indexNext < this.state.huds.length) ? indexNext : 0;
+        }
+
         var next = this.state.huds[indexNext];
 
         if(current.ele){

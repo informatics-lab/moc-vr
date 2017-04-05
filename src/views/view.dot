@@ -37,7 +37,7 @@ title: view
             <a-assets>
                 <img id="img_[[= model.id]]" crossorigin="use-credentials" src="[[= model.photosphere]]">
                 [[? model.lidar]]
-                    <img id="lidar_[[= model.id]]" src="/img/obs/1eed108e-30a5-4051-b0c0-e57577e09dc0/lidar">
+                    <img id="lidar_[[= model.id]]" crossorigin="use-credentials" src="[[= model.lidar]]">
                 [[?]]
             </a-assets>
             <a-sky src="#img_[[= model.id]]"></a-sky>
