@@ -205,16 +205,13 @@ function createHUD(width, height, bg, visibility, temperature, dewPoint, windDir
     var canvas = document.createElement("canvas");
     canvas.width = width;
     canvas.height = height;
-    canvas.setAttribute("style", "border:black 1px solid");
 
     var ctx = canvas.getContext("2d");
     drawBackground(ctx, bg);
     drawVisibility(ctx, visibility);
     drawTempInstruments(ctx, temperature, dewPoint);
 
-    var asynActions = [drawWindBarb(ctx, windDirection, windSpeed)];
-
-    return Promise.all(asynActions).then(function(){
+    return drawWindBarb(ctx, windDirection, windSpeed).then(function(){
         return canvas;
     });
 }
