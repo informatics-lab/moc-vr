@@ -1,4 +1,162 @@
-AFRAME.registerComponent('hud', {
+/**
+HUD Analytics
+**/
+var analyticsEventTimmers = {};
+function stopTimeEvent(id){
+    try{
+        timer = analyticsEventTimmers[id];
+        if(timer){
+            var time = (new Date() - timer.date) / 1000;
+            delete analyticsEventTimmers[id];
+            ga('send', 'timing', timer['cat'], timer['label'], time);
+        } else {
+            console.warn('No timer found for: ', stop);
+        }
+    } catch (e){ // Let's be fault tolorant in our analytics.
+        console.warn('Error in stopTimeEvent', e);
+    }
+}
+
+function startTimeEvent(id, label){
+    try{
+        analyticsEventTimmers[id] = {
+            date:new Date(),
+            cat:"VR",
+            label:label
+        };
+    } catch (e){ // Let's be fault tolorant in our analytics.
+        console.warn('Error in startTimeEvent', e);
+    }
+}
+
+
+
+
+/**
+HUD controller
+**/
+
+
+AFRAME.registerComponent('hud-toggler', {
+    schema: {
+        name: {type: 'string'},
+        order: {type: 'number', default:1}
+    },
+
+    state: {
+        current:0,
+        isFirst:true,
+        huds:[
+            {name: 'No HUD', ele: null}
+        ]
+    },
+
+    isVR:false,
+
+    init: function () {
+        var ele = this.el;
+        var name = this.data.name;
+        var order = this.data.order;
+        this.addHUD(name, ele, order)
+        if(this.state.isFirst){
+            this.initListeners();
+        }
+        this.state.isFirst = false;
+    },
+
+    initListeners: function(){
+        var self = this;
+        var scene = document.querySelector("a-scene");
+        scene.addEventListener("enter-vr", function(evt) {
+            startTimeEvent("IN_VR", "In VR");
+            ga('send', 'event', "VR", "Enter VR");
+            self.isVR = true;
+        });
+        scene.addEventListener("exit-vr", function(evt) {
+            stopTimeEvent("IN_VR");
+            self.turnOffHUD();
+            ga('send', 'event', "VR", "Exit VR" );
+            self.isVR = false;
+        });
+
+        scene.addEventListener('click', function(evt) {
+            if(self.isVR && scene.isMobile){
+                self.toggleHUD();
+            }
+        });
+    },
+
+    addHUD: function(name, ele, place){
+        place = (isNaN(place))? 1 : place;
+        place = (place <=0)? 1 : place;
+        this.state.huds.splice(place, 0, {name:name, ele:ele});
+    },
+
+    turnOffHUD: function(){
+        this.toggleHUD(0);
+    },
+
+    toggleHUD: function(indexNext){
+        var current = this.state.huds[this.state.current];
+        if(isNaN(indexNext) || indexNext < 0  || indexNext >= this.state.huds.length){
+            indexNext = this.state.current + 1;
+            indexNext = (indexNext < this.state.huds.length) ? indexNext : 0;
+        }
+
+        var next = this.state.huds[indexNext];
+
+        if(current.ele){
+            current.ele.setAttribute("visible", false);
+        }
+        stopTimeEvent("HUD");
+
+
+        if(next.ele){
+            next.ele.setAttribute("visible", true);
+        }
+        startTimeEvent('HUD', next.name);
+        this.state.current = indexNext;
+    },
+
+    currentHUDName: function(){
+        return this.state.huds[this.state.current].name;
+    }
+});
+
+
+
+/**
+Rotate to camera
+**/
+AFRAME.registerComponent('lidar-hud', {
+    schema: {},
+
+    init: function () {
+        var el = this.el;
+        // Move to camera on visability change
+        el.addEventListener('componentchanged', function(){
+            var camera = document.getElementById('camera');
+            el.setAttribute('rotation', camera.getAttribute('rotation'));
+            el.setAttribute('position', camera.getAttribute('position'));
+        });
+
+        // Scale based on image size
+        var img = document.querySelector(el.getAttribute('src'));
+        var theta = (2 * Math.PI / 360) * el.getAttribute('theta-length');
+        var x = theta * el.getAttribute('radius');
+        var scale = x / img.width ;
+        el.setAttribute('height', img.height * scale);
+
+    }
+});
+
+
+
+
+/**
+The data HUD showing things like temp, visability, wind dir.
+**/
+AFRAME.registerComponent('data-hud', {
     schema: {
         width: {type: 'number', default: 0.8},
         height: {type: 'number', default: 0.6},
@@ -19,86 +177,26 @@ AFRAME.registerComponent('hud', {
         var el = this.el;
         var self = this;
         var isVR = false;
-        var canvasPromise = createHUD(data.width * 1000, data.height * 1000, data.background, data.visibility, data.temperature, data.dewPoint, data.windDirection, data.windSpeed);
+        self.viewNames = ['No HUD'];
+        self.views = [null]; // The avaliable HUD views. null = hidden.
+        self.currentView = null;
 
-        canvasPromise.then(function (canvas) {
-            self.geometry = new THREE.PlaneBufferGeometry(data.width, data.height);
+
+        var createdViews = [];
+        self.viewNames.push('Data HUD');
+        createHUD(data.width * 1000, data.height * 1000,
+             data.background, data.visibility, data.temperature, data.dewPoint,
+             data.windDirection, data.windSpeed)
+        .then(function(canvas){
+            var geometry = new THREE.PlaneBufferGeometry(data.width, data.height);
             var texture = new THREE.Texture(canvas);
             texture.needsUpdate = true;
-            self.material = new THREE.MeshBasicMaterial({map: texture, transparent: true});
-            self.mesh = new THREE.Mesh(self.geometry, self.material);
-            el.setObject3D("mesh", self.mesh);
+            var material = new THREE.MeshBasicMaterial({map: texture, transparent: true});
+            el.setObject3D("mesh", new THREE.Mesh(geometry, material));
         });
-
-        /*
-         * toggles HUD on and off
-         */
-        var scene = document.querySelector("a-scene");
-        scene.addEventListener("enter-vr", function(evt) {
-            startTimeEvent("VR", "VR", "In VR");
-            if(ga){
-                ga('send', 'event', "VR", "Enter VR");
-            }
-            if(true || scene.isMobile) {
-                el.setAttribute("visible", true);
-                startTimeEvent("HUD", "VR", "Showing HUD");
-            } else {
-                startTimeEvent("HUD", "VR", "No HUD");
-            }
-            isVR = true;
-        });
-        scene.addEventListener("exit-vr", function(evt) {
-            stopTimeEvent("VR");
-            if(ga){
-                ga('send', 'event', "VR", "Exit VR");
-            }
-            el.setAttribute("visible", false);
-            isVR = false;
-        });
-        scene.addEventListener('click', function(evt) {
-            if((true || scene.isMobile) && isVR) {
-                stopTimeEvent("HUD");
-                if(el.getAttribute("visible")){
-                    startTimeEvent("HUD", "VR", "No HUD");
-                    el.setAttribute("visible", false);
-                } else {
-                    startTimeEvent("HUD", "VR", "Showing HUD");
-                    el.setAttribute("visible", true);
-                }
-            }
-        });
-
     }
-
 });
 
-var analyticsEventTimmers = {};
-function stopTimeEvent(id){
-    try{
-        timer = analyticsEventTimmers[id];
-        if(timer){
-            var time = (new Date() - timer.date) / 1000;
-            delete analyticsEventTimmers[id];
-            ga('send', 'timing', timer['cat'], timer['label'], time);
-        } else {
-            console.error('No timer found for: ', stop);
-        }
-    } catch (e){ // Let's be fault tolorant in our analytics.
-        console.error('Error in stopTimeEvent', e);
-    }
-}
-
-function startTimeEvent(id, cat, label){
-    try{
-        analyticsEventTimmers[id] = {
-            date:new Date(),
-            cat:cat,
-            label:label
-        };
-    } catch (e){ // Let's be fault tolorant in our analytics.
-        console.error('Error in stopTimeEvent', e);
-    }
-}
 
 // returns the hud canvas dom element
 function createHUD(width, height, bg, visibility, temperature, dewPoint, windDirection, windSpeed) {
@@ -107,17 +205,15 @@ function createHUD(width, height, bg, visibility, temperature, dewPoint, windDir
     var canvas = document.createElement("canvas");
     canvas.width = width;
     canvas.height = height;
-    // canvas.setAttribute("style", "border:black 1px solid");
 
     var ctx = canvas.getContext("2d");
     drawBackground(ctx, bg);
     drawVisibility(ctx, visibility);
     drawTempInstruments(ctx, temperature, dewPoint);
+
     return drawWindBarb(ctx, windDirection, windSpeed).then(function(){
         return canvas;
     });
-
-
 }
 
 function drawBackground(ctx, bg) {

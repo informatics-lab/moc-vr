@@ -25,19 +25,38 @@ title: view
         <script type="text/javascript" src="/js/hud/hud.js"></script>
 
         <a-scene embedded>
-            <a-camera reverse-mouse-drag="true" >
-                <a-entity hud="width:0.8; height:0.6; background:#FFF; visibility:[[= model.visibility]]; temperature:[[= model.temperature]]; dewPoint:[[= model.dewPoint]]; windDirection:[[= model.windDirection]]; windSpeed:[[= model.windSpeed]];"
-                                      position="0.1 0.05 -0.65"
-                                      visible="false">
+            <a-camera id="camera" reverse-mouse-drag="true" position="0 0 0">
+                <a-entity hud-toggler="name:'Data HUD'; order:1"
+                          data-hud="width:0.7; height:0.6; background:#FFF; visibility:[[= model.visibility]]; temperature:[[= model.temperature]]; dewPoint:[[= model.dewPoint]]; windDirection:[[= model.windDirection]]; windSpeed:[[= model.windSpeed]]"
+                          position="0.1 0.05 -0.65"
+                          visible="false">
+
                 </a-entity>
+
             </a-camera>
             <a-assets>
                 <img id="img_[[= model.id]]" crossorigin="use-credentials" src="[[= model.photosphere]]">
+                [[? model.lidar]]
+                    <img id="lidar_[[= model.id]]" crossorigin="use-credentials" src="[[= model.lidar]]">
+                [[?]]
             </a-assets>
             <a-sky src="#img_[[= model.id]]"></a-sky>
+
+            [[? model.lidar]]
+                <a-curvedimage
+                    lidar-hud
+                    hud-toggler="name:'Lidar HUD'; order:2"
+                    visible="false"
+                    src="#lidar_[[= model.id]]"
+                    height="6.0" radius="7.7" theta-start="135" theta-length="90"
+                    position="0 0 0"
+                    rotation="0 0 0" scale="2 2 2"
+                    >
+                </a-curvedimage>
+            [[?]]
+
         </a-scene>
 
     </div>
 </div>
 #]]
-
