@@ -3,8 +3,9 @@
 var users = {
     admins: [
         "t.powell.meto@gmail.com",
-        "anthony.duke@metoffice.gov.uk"
-]
+        "anthony.duke@metoffice.gov.uk",
+        "james.salter@metoffice.gov.uk"
+    ]
 };
 
 exports.isAdmin = function (req, res, next) {
