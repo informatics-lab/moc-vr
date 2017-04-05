@@ -14,7 +14,9 @@ title: view
     <h1 class="content-subhead">Photosphere Observation</h1>
     <div class="post">
         <p class="post-meta">
+            [[? model.admin]]
             <a href="/edit/[[= model.id]]" title="edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+            [[?]]
             Observed [[= model.dateTime]] tagged as:
             [[~ model.tags :value:index]]
             <a class="post-category" href="/tag/[[= value]]">[[= value]]</a>
