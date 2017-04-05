@@ -27,7 +27,7 @@ title: view
         <a-scene embedded>
             <a-camera id="camera" reverse-mouse-drag="true" position="0 0 0">
                 <a-entity hud-toggler="name:'Data HUD'; order:1"
-                          data-hud="width:0.7; height:0.6; background:#FFF; visibility:[[= model.visibility]]; temperature:[[= model.temperature]]; dewPoint:[[= model.dewPoint]]; windDirection:[[= model.windDirection]]; windSpeed:[[= model.windSpeed]]; lidar:[[= model.lidar]]"
+                          data-hud="width:0.7; height:0.6; background:#FFF; visibility:[[= model.visibility]]; temperature:[[= model.temperature]]; dewPoint:[[= model.dewPoint]]; windDirection:[[= model.windDirection]]; windSpeed:[[= model.windSpeed]]"
                           position="0.1 0.05 -0.65"
                           visible="false">
 

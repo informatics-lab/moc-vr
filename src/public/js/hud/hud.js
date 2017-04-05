@@ -165,8 +165,7 @@ AFRAME.registerComponent('data-hud', {
         temperature: {type: 'number'},
         dewPoint: {type: 'number'},
         windDirection: {type: 'number'},
-        windSpeed: {type: 'number'},
-        lidar: {type: 'string'}
+        windSpeed: {type: 'number'}
     },
 
 
@@ -187,7 +186,7 @@ AFRAME.registerComponent('data-hud', {
         self.viewNames.push('Data HUD');
         createHUD(data.width * 1000, data.height * 1000,
              data.background, data.visibility, data.temperature, data.dewPoint,
-             data.windDirection, data.windSpeed, data.lidar)
+             data.windDirection, data.windSpeed)
         .then(function(canvas){
             var geometry = new THREE.PlaneBufferGeometry(data.width, data.height);
             var texture = new THREE.Texture(canvas);
@@ -218,55 +217,6 @@ function createHUD(width, height, bg, visibility, temperature, dewPoint, windDir
     return Promise.all(asynActions).then(function(){
         return canvas;
     });
-
-
-}
-
-// returns the lidar image canvas dom element
-function createLidar(width, height, img) {
-    console.log("creating lidar");
-
-    var canvas = document.createElement("canvas");
-    canvas.width = width;
-    canvas.height = height;
-
-    var ctx = canvas.getContext("2d");
-
-    ctx.beginPath();
-    ctx.rect(0, 0, width, height);
-    ctx.fillStyle = "red";
-    ctx.fill();
-
-    return addLidar(ctx, img).then(function(){
-        return canvas;
-    });
-}
-
-function addLidar(ctx, lidar){
-    return new Promise(function(resolve, reject){
-        var img = new Image();
-        img.addEventListener('load',function () {
-            var xOffset = 0;
-            var yOffset = 0;
-
-            var ctxW = ctx.canvas.width - 2 * xOffset;
-            var ctxH = ctx.canvas.height;
-            var ctxAspect = ctxW/ctxH;
-
-            var imgAspect = img.width/img.height
-            var scale = (imgAspect > ctxAspect)?  ctxW / img.width : ctxH / img.height;
-            var targetW = scale * img.width;
-            var targetH = scale * img.height;
-
-            xOffset = (targetW < ctxW) ? (ctxW - targetW) / 2 : xOffset;
-            yOffset = (targetH < ctxH) ? (ctxH - targetH) / 2 : yOffset;
-            ctx.drawImage(img, xOffset, yOffset, targetW, targetH);
-            resolve();
-        });
-        img.addEventListener('error', reject);
-        img.src = lidar;
-    });
-
 }
 
 function drawBackground(ctx, bg) {
