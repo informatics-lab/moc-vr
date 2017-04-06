@@ -8,6 +8,7 @@ var proxy = require('express-http-proxy');
 var path = require("path");
 var uuid = require("node-uuid");
 var dataService = require("./mocvr-data-service");
+var users = require("./users");
 
 //set doT to render our view templates
 app.engine('dot', engine.__express);
@@ -28,6 +29,7 @@ app.use('/img/', proxy('moc-vr.s3-eu-west-1.amazonaws.com/', {
 
 //view endpoints
 app.get("/", function (req, res) {
+
     dataService.listTags()
         .then(function (data) {
             var allTags = [];
@@ -52,8 +54,12 @@ app.get("/", function (req, res) {
 
 });
 
-app.get("/edit/:id", function (req, res) {
+app.get("/edit/:id", users.isAdmin, function (req, res) {
     var id = req.params.id.trim();
+    if (!res.locals.user.admin) {
+        res.redirect("/view/"+id);
+        return;
+    }
     dataService.findById(id)
         .then(function (response) {
             var result = response.Items[0];
@@ -89,24 +95,23 @@ app.get("/edit/:id", function (req, res) {
             console.error(err);
             res.status(500).send(err);
         });
+
 });
 
 app.get("/upload", function (req, res) {
     res.render("upload");
 });
 
-app.get("/view/:id", function (req, res) {
-    function convertS3URL(url){
-        return "/img" + decodeURIComponent(url).split("amazonaws.com")[1];
-    }
+app.get("/view/:id", users.isAdmin, function (req, res) {
     var id = req.params.id.trim();
     if (id && id != "") {
         dataService.findById(id)
             .then(function (response) {
                 var result = response.Items[0];
-                var img_url =  convertS3URL(result.photosphere.S);
+                var img_url = convertS3URL(result.photosphere.S);
                 var lidar_url = (result.lidar) ? convertS3URL(result.lidar.S) : "";
                 var model = {
+                    admin: res.locals.user.admin,
                     id: result.id.S,
                     dateTime: new Date(result.dateTime.S).toDateString(),
                     photosphere: img_url,
@@ -147,7 +152,7 @@ app.get(/\/tag\/([- _a-z%A-Z0-9\/]*)\/?$/, function (req, res) {
                 currentUrl: decodeURI(req.path)
             };
             results.forEach(function (result) {
-                var img_url = "/img" + result.photosphere.S.split("amazonaws.com")[1];
+                var img_url = convertS3URL(result.photosphere.S);
                 var ob = {
                     id: result.id.S,
                     dateTime: new Date(result.dateTime.S).toDateString(),
@@ -161,7 +166,7 @@ app.get(/\/tag\/([- _a-z%A-Z0-9\/]*)\/?$/, function (req, res) {
                 });
                 model.matchingObs.push(ob);
             });
-            if (model.matchingObs.length === 1){
+            if (model.matchingObs.length === 1) {
                 delete model.relatedTags;
             }
             return model;
@@ -275,8 +280,12 @@ app.post("/create", function (req, res) {
 
 });
 
-app.post("/update/:id", function (req, res) {
+app.post("/update/:id", users.isAdmin, function (req, res) {
     var id = req.params.id.trim();
+    if(!res.locals.user.admin) {
+        res.redirect("/view/"+id);
+        return;
+    }
 
     // validation
     function validateReq(req) {
@@ -355,8 +364,13 @@ app.post("/update/:id", function (req, res) {
 
 });
 
-app.get("/delete/:id", function (req, res) {
+app.get("/delete/:id", users.isAdmin, function (req, res) {
     var id = req.params.id.trim();
+    if(!res.locals.user.admin) {
+        res.redirect("/view/"+id);
+        return;
+    }
+
     dataService.removeRecordById(id)
         .then(function () {
             res.writeHead(301, {Location: "/"});
@@ -368,8 +382,11 @@ app.get("/delete/:id", function (req, res) {
         });
 });
 
-
 //server init
 app.listen(3000, function () {
     console.log("Express server listening on port 3000");
 });
+
+function convertS3URL(url) {
+    return "/img" + decodeURIComponent(url).split("amazonaws.com")[1];
+}
