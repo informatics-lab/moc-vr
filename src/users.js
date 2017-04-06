@@ -4,7 +4,8 @@ var users = {
     admins: [
         "t.powell.meto@gmail.com",
         "anthony.duke@metoffice.gov.uk",
-        "james.salter@metoffice.gov.uk"
+        "james.salter@metoffice.gov.uk",
+        "tam203@gmail.com"
     ]
 };
 
