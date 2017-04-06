@@ -13,6 +13,9 @@
         console.log("Running non-production google analytics replacement now");
         ga = function(arg) {
           console.log("ga:", arguments);
+          if(arguments[2] && arguments[2].hitCallback){
+            arguments[2].hitCallback();
+          }
         }
       }
       ga('create', 'UA-60337429-5', 'auto');
@@ -66,6 +69,31 @@
       [[? layout.localjs]]
       [[= layout.localjs]]
       [[?]]
+
+      <script>
+      // Instrement filtering on tags
+      (function(){
+        var tags = document.getElementsByClassName('post-category');
+        for (var i = 0; i < tags.length; i++) {
+          var tag = tags[i];
+          tag.addEventListener('click', function(e){
+            if(ga){
+              var action = (e.target.className.search('active-tag') === -1)? 'Filter by' : 'Remove filter';
+              var value = e.target.innerText;
+              ga('send', 'event', {
+                eventCategory: action,
+                eventAction: 'value',
+                transport: 'beacon',
+                hitCallback:  function(){
+                  document.location = e.target.href;
+                }}
+              );
+              e.preventDefault()
+            }
+          });
+        }
+      })();
+      </script>
 
   </body>
 </html>
