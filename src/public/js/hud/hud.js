@@ -6,7 +6,7 @@ function stopTimeEvent(id){
     try{
         timer = analyticsEventTimmers[id];
         if(timer){
-            var time = (new Date() - timer.date) / 1000;
+            var time = Math.round((new Date() - timer.date) / 1000);
             delete analyticsEventTimmers[id];
             ga('send', 'timing', timer['cat'], timer['label'], time);
         } else {
