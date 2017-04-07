@@ -71,7 +71,7 @@
       [[?]]
 
       <script>
-      // Instrement filtering on tags
+      // Instrement tags selection and removal
       (function(){
         var tags = document.getElementsByClassName('post-category');
         for (var i = 0; i < tags.length; i++) {
@@ -88,7 +88,7 @@
                   document.location = e.target.href;
                 }}
               );
-              e.preventDefault()
+              e.preventDefault();
             }
           });
         }

@@ -281,3 +281,30 @@ a.pure-button:hover {
 a.pure-button:active {
     text-decoration: none;
 }
+
+/*
+* Shrink header on mobile
+*/
+
+/* Extra Small Devices, Phones */
+@media only screen and (max-width : 480px) {
+    .header {
+        margin: 0.5em;
+    }
+    .header h1{
+        font-size: 1.5em;
+    }
+    .brand-tagline{
+        display: none;
+    }
+    .nav, .header h1, .nav-list{
+        display: inline-block;
+    }
+    .nav-item a {
+        margin: 0;
+    }
+    .content {
+        padding: 0.5em 0.5em 0;
+    }
+
+}
