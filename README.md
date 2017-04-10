@@ -7,7 +7,7 @@ This project is a collaboration between the Met Office Informatics Lab & Met Off
 ## Credentials
 You will need a valid `Github` account and an `AWS IAM` with keys to access `s3` and `dynamoDB`.  
 
-## Building and Running in Dev
+## Building and Running in Dev with Docker Compose
 Ensure you have `Docker` installed.  
 Edit your `/etc/hosts` file adding `docker-machine` as the alias for the ip address of your docker-machine VM.    
 Navigate to the project folder and run `docker-compose -f dev-docker-compose.yml up -d --build`.    
