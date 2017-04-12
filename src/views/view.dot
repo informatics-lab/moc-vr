@@ -19,7 +19,7 @@ title: View
             [[?]]
             Observed [[= model.dateTime]] tagged as:
             [[~ model.tags :value:index]]
-            <a class="post-category" href="/tag/[[= value]]">[[= value]]</a>
+            <a class="post-category" href="/tag/[[= value]]#avaliable_tags">[[= value]]</a>
             [[~]]
         </p>
         <br />

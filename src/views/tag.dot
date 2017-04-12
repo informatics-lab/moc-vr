@@ -4,7 +4,7 @@ title: Find
 ---
 
 [[##content:
-<div class="posts">
+<div class="posts" id="avaliable_tags">
     [[? model.relatedTags ]]
     <h1 class="content-subhead">Related Tags</h1>
     <p class="tag-cloud">
@@ -12,10 +12,10 @@ title: Find
             <a
             [[? model.tags.indexOf(val) >= 0 ]]
                 class="post-category active-tag"
-                href="[[= model.currentUrl.replace('/'+val,'')]]"
+                href="[[= model.currentUrl.replace('/'+val,'')]]#avaliable_tags"
              [[??]]
                  class="post-category"
-                 href="[[= model.currentUrl]]/[[= val]]"
+                 href="[[= model.currentUrl]]/[[= val]]#avaliable_tags"
              [[?]]
             >[[= val]]</a>
         [[~]]
@@ -35,10 +35,10 @@ title: Find
                     <a
                     [[? model.tags.indexOf(val) >= 0 ]]
                         class="post-category active-tag"
-                        href="[[= model.currentUrl.replace('/'+val,'')]]"
+                        href="[[= model.currentUrl.replace('/'+val,'')]]#avaliable_tags"
                      [[??]]
                          class="post-category"
-                         href="[[= model.currentUrl]]/[[= val]]"
+                         href="[[= model.currentUrl]]/[[= val]]#avaliable_tags"
                      [[?]]
                     >[[= val]]</a>
                 [[~]]
