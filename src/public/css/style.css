@@ -34,6 +34,10 @@ h3 {
     margin: 3em auto;
 }
 
+.header .logo {
+    max-width: 10em;
+}
+
 .sidebar {
     background-color: #2A2A2A;
     background-size: cover;
@@ -282,6 +286,8 @@ a.pure-button:active {
     text-decoration: none;
 }
 
+
+
 /*
 * Shrink header on mobile
 */
@@ -289,22 +295,30 @@ a.pure-button:active {
 /* Extra Small Devices, Phones */
 @media only screen and (max-width : 480px) {
     .header {
-        margin: 0.5em;
+        margin: 0.5em auto;
+        display: table;
     }
     .header h1{
         font-size: 1.5em;
     }
-    .brand-tagline{
+    .brand-tagline, .brand-title{
         display: none;
     }
-    .nav, .header h1, .nav-list{
+    .nav, .nav-list{
         display: inline-block;
+
+      display: table-cell;
+      vertical-align: middle;
     }
     .nav-item a {
         margin: 0;
     }
     .content {
         padding: 0.5em 0.5em 0;
+    }
+
+    .header .logo {
+        width:6em;
     }
 
 }
