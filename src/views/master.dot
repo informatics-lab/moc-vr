@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Skyview 360 -[[= layout.title]]</title>
+    <title>Sky View 360 -[[= layout.title]]</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <script>
@@ -59,8 +59,8 @@
                     <div class="met_office_logo">
                         <img class="met-office-logo-lines" src="/images/met-office-logo.svg" alt="Met Office"/>
                         <img class="met-office-logo-text" src="/images/met-office-logo-text.svg" alt="Met Office"/>
-                        <img class="logo" src="/images/icon.svg" alt="Skyview 360"/>
-                        <h1 class="brand-title">Skyview 360</h1>
+                        <img class="logo" src="/images/icon.svg" alt="Sky View 360"/>
+                        <h1 class="brand-title">Sky View 360</h1>
                     </div>
                     <br/>
                   </div>
