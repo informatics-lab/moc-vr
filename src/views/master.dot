@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>MOC 360&deg; :: [[= layout.title]]</title>
+    <title>Skyview 360 -[[= layout.title]]</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <script>
@@ -45,11 +45,32 @@
   </head>
   <body>
       <div id="layout" class="pure-g">
+        <div class="ribbon-outer">
+          <div class="ribbon-wrapper"><div class="ribbon">Prototype</div></div>
+        </div>
           <div class="sidebar pure-u-1 pure-u-md-1-4">
+
+
               <div class="header">
-                  <img class="logo" src="/images/icon.svg" alt="MOC 360"/>
-                  <h1 class="brand-title">MOC 360&deg;</h1>
+
+
+
+                  <div class="app_logo">
+                    <div class="met_office_logo">
+                        <img class="met-office-logo-lines" src="/images/met-office-logo.svg" alt="Met Office"/>
+                        <img class="met-office-logo-text" src="/images/met-office-logo-text.svg" alt="Met Office"/>
+                        <img class="logo" src="/images/icon.svg" alt="Skyview 360"/>
+                        <h1 class="brand-title">Skyview 360</h1>
+                    </div>
+                    <br/>
+                  </div>
+                  <br/>
+
+
+
                   <h2 class="brand-tagline">[[= layout.title]]</h2>
+
+
                   <nav class="nav">
                       <ul class="nav-list">
                           <li class="nav-item">
@@ -60,7 +81,11 @@
                           </li>
                       </ul>
                   </nav>
+                  <div class="clear"></div>
               </div>
+
+
+
           </div>
           <div class="content pure-u-1 pure-u-md-3-4">
              [[= layout.content ]]

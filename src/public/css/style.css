@@ -28,15 +28,38 @@ h3 {
     padding: 0;
 }
 
+
+.app_logo {
+    text-align: center;
+    float: left;
+}
+.met_office_logo{
+    width: 11.5em;
+    display: inline-block;
+}
+
+
+.met-office-logo-lines, .met-office-logo-text {
+    height: 2.0em
+}
+
 .header {
     text-align: center;
     top: auto;
-    margin: 3em auto;
+    margin: 1.5em auto;
+}
+
+.header h1{
+    margin-top: 0.2em;
+    font-size: 1.5em;
 }
 
 .header .logo {
-    max-width: 10em;
+    display: inline-block;
+    height: 3em;
 }
+
+.clear { clear: both;}
 
 .sidebar {
     background-color: #2A2A2A;
@@ -178,14 +201,18 @@ h3 {
     background: none;
 }
 
+/* Menu on LHS */
 @media (min-width: 48em) {
+    .app_logo { float: none;}
+
+    .header {position: absolute; right: 0;}
     .content {
         padding: 2em 3em 0;
         margin-left: 25%;
     }
 
     .header {
-        margin: 80% 2em 0;
+        margin: 75% 5% 0;
         text-align: right;
     }
 
@@ -298,8 +325,17 @@ a.pure-button:active {
         margin: 0.5em auto;
         display: table;
     }
+    .header br {display: none;}
+    .met-office-logo-text{ display: none;}
     .header h1{
         font-size: 1.5em;
+    }
+    .met-office-logo-lines{
+        position: relative;
+        height: 2.5em;
+    }
+    .met_office_logo{
+        width: 8em;
     }
     .brand-tagline, .brand-title{
         display: none;
@@ -318,7 +354,76 @@ a.pure-button:active {
     }
 
     .header .logo {
-        width:6em;
+        width:4em;
     }
 
+}
+
+
+/* prototype ribbon */
+
+.ribbon-wrapper {
+    z-index: 1;
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  position: absolute;
+  top: -3px;
+  left: -3px;
+}
+
+.ribbon {
+  letter-spacing: 0.05em;
+  font: bold 15px Sans-Serif;
+  color: #333;
+  text-align: center;
+  text-shadow: rgba(255,255,255,0.5) 0px 1px 0px;
+  -webkit-transform: rotate(-45deg);
+  -moz-transform:    rotate(-45deg);
+  -ms-transform:     rotate(-45deg);
+  -o-transform:      rotate(-45deg);
+  position: relative;
+  padding: 7px 0;
+  left: -45px;
+  top: 25px;
+  width: 200px;
+  background-color: #EDFF40;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#EDFF40), to(#BADB0D));
+  background-image: -webkit-linear-gradient(top, #EDFF40, #BADB0D);
+  background-image:    -moz-linear-gradient(top, #EDFF40, #BADB0D);
+  background-image:     -ms-linear-gradient(top, #EDFF40, #BADB0D);
+  background-image:      -o-linear-gradient(top, #EDFF40, #BADB0D);
+  color: #000000;;
+  -webkit-box-shadow: 0px 0px 3px rgba(0,0,0,0.3);
+  -moz-box-shadow:    0px 0px 3px rgba(0,0,0,0.3);
+  box-shadow:         0px 0px 3px rgba(0,0,0,0.3);
+}
+
+.ribbon:before, .ribbon:after {
+  content: "";
+  border-top:   3px solid #2A2A2A;
+  border-left:  3px solid transparent;
+  border-right: 3px solid transparent;
+  position:absolute;
+  bottom: -3px;
+}
+
+.ribbon:before {
+  left: 0;
+}
+.ribbon:after {
+  right: 0;
+}​
+
+.ribbon-outer{
+  margin: 50px auto;
+  width: 280px;
+  height: 370px;
+  background: white;
+  border-radius: 10px;
+  -webkit-box-shadow: 0px 0px 8px rgba(0,0,0,0.3);
+  -moz-box-shadow:    0px 0px 8px rgba(0,0,0,0.3);
+  box-shadow:         0px 0px 8px rgba(0,0,0,0.3);
+  position: relative;
+  z-index: 90;
 }
