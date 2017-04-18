@@ -45,9 +45,10 @@
   </head>
   <body>
       <div id="layout" class="pure-g">
-        <div class="ribbon-outer">
-          <div class="ribbon-wrapper"><div class="ribbon">Prototype</div></div>
-        </div>
+
+
+
+
           <div class="sidebar pure-u-1 pure-u-md-1-4">
 
 
@@ -85,11 +86,18 @@
               </div>
 
 
+              <div class="ribbon-outer">
+                <div class="ribbon-wrapper"><div class="ribbon">Prototype</div></div>
+              </div>
+
 
           </div>
           <div class="content pure-u-1 pure-u-md-3-4">
              [[= layout.content ]]
           </div>
+          <!-- Don't put content under here. It will overlay ontop of the VR
+          sceane in VR mode on Safari on iOS (at least some versions)-->
+
       </div>
 
       [[? layout.localjs]]
@@ -120,6 +128,9 @@
         }
       })();
       </script>
+
+
+
 
   </body>
 </html>

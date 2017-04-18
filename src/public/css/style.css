@@ -364,7 +364,6 @@ a.pure-button:active {
 /* prototype ribbon */
 
 .ribbon-wrapper {
-    z-index: 1;
   width: 200px;
   height: 200px;
   overflow: hidden;
@@ -428,6 +427,5 @@ a.pure-button:active {
   -moz-box-shadow:    0px 0px 8px rgba(0,0,0,0.3);
   box-shadow:         0px 0px 8px rgba(0,0,0,0.3);
   position: relative;
-  z-index: 90;
   pointer-events: none;
 }
