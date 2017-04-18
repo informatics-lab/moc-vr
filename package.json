@@ -1,6 +1,6 @@
 {
   "name": "moc-vr",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": "Thomas Powell <thomas.powell@informaticslab.co.uk>",
   "description": "Met Office College VR Application",
   "dependencies": {
