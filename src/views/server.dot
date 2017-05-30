@@ -1,0 +1,46 @@
+---
+layout: master.dot
+title: View
+---
+
+[[##remotejs:
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/aframe/0.5.0/aframe.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.1/socket.io.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+#]]
+
+[[##content:
+<div class = "posts">
+    <h1 class="content-subhead">Photosphere Server <span class="head-id" id="sid"></span></h1>
+
+        <form class="pure-form pure-form-aligned" action="javascript:void(0);">
+            <fieldset>
+
+               <div class="pure-control-group">
+                   <label for="pid">photosphere id</label>
+                   <input class="pure-input-2-3" type="text" id="pid" name="pid"/>
+               </div>
+
+               <div class="pure-controls">
+                   <button id="serve" class="pure-button pure-button-primary">serve</button>
+               </div>
+
+            </fieldset>
+        </form>
+
+       <script type="text/javascript" src="/js/websocket/server.js"></script>
+
+       <div class="post">
+           <div class="post">
+               <script type="text/javascript" src="/js/websocket/client.js"></script>
+               <a-scene embedded>
+                   <a-camera id="camera" reverse-mouse-drag="true" position="0 0 0"></a-camera>
+                   <a-entity websocket-client position="0 0 0"></a-entity>
+                   <a-sky id="psky"></a-sky>
+               </a-scene>
+           </div>
+       </div>
+</div>
+
+#]]

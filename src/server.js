@@ -2,7 +2,9 @@
 
 var express = require("express"),
     fileUpload = require("../lib/index.js"),
-    app = express();
+    app = express(),
+    http = require("http").Server(app),
+    io = require("socket.io")(http);
 var engine = require("express-dot-engine");
 var proxy = require('express-http-proxy');
 var path = require("path");
@@ -45,7 +47,7 @@ app.get("/", function (req, res) {
             return tags;
         })
         .then(function (tags) {
-            res.render('index', {tags: Object.keys(tags)})
+            res.render('index', {tags: Object.keys(tags).sort()})
         })
         .catch(function (err) {
             console.error(err);
@@ -57,7 +59,7 @@ app.get("/", function (req, res) {
 app.get("/edit/:id", users.isAdmin, function (req, res) {
     var id = req.params.id.trim();
     if (!res.locals.user.admin) {
-        res.redirect("/view/"+id);
+        res.redirect("/view/" + id);
         return;
     }
     dataService.findById(id)
@@ -116,7 +118,7 @@ app.get("/view/:id", users.isAdmin, function (req, res) {
                     dateTime: new Date(result.dateTime.S).toDateString(),
                     photosphere: img_url,
                     lidar: lidar_url,
-                    tags: result.tags.SS,
+                    tags: result.tags.SS.sort(),
                     visibility: result.visibility.N,
                     temperature: result.temperature.N,
                     dewPoint: result.dewPoint.N,
@@ -135,7 +137,7 @@ app.get("/view/:id", users.isAdmin, function (req, res) {
     }
 });
 
-// If you are `searching`` for no tags then redirect to home
+// If you are `searching` for no tags then redirect to home
 app.get(/^\/tag\/?$/, function (req, res) {
     res.redirect('/');
 });
@@ -157,7 +159,7 @@ app.get(/\/tag\/([- _a-z%A-Z0-9\/]*)\/?$/, function (req, res) {
                     id: result.id.S,
                     dateTime: new Date(result.dateTime.S).toDateString(),
                     photosphere: img_url,
-                    tags: result.tags.SS
+                    tags: result.tags.SS.sort()
                 };
                 ob.tags.forEach(function (t) {
                     if (!model.relatedTags.includes(t)) {
@@ -282,8 +284,8 @@ app.post("/create", function (req, res) {
 
 app.post("/update/:id", users.isAdmin, function (req, res) {
     var id = req.params.id.trim();
-    if(!res.locals.user.admin) {
-        res.redirect("/view/"+id);
+    if (!res.locals.user.admin) {
+        res.redirect("/view/" + id);
         return;
     }
 
@@ -366,8 +368,8 @@ app.post("/update/:id", users.isAdmin, function (req, res) {
 
 app.get("/delete/:id", users.isAdmin, function (req, res) {
     var id = req.params.id.trim();
-    if(!res.locals.user.admin) {
-        res.redirect("/view/"+id);
+    if (!res.locals.user.admin) {
+        res.redirect("/view/" + id);
         return;
     }
 
@@ -382,8 +384,63 @@ app.get("/delete/:id", users.isAdmin, function (req, res) {
         });
 });
 
+app.get("/client", function (req, res) {
+    res.render("client");
+});
+
+app.get("/server", function (req, res) {
+    res.render("server");
+});
+
+var sessions = {};
+
+io.on("connection", function (socket) {
+
+    var self = this;
+
+    socket.on("register", function(msg) {
+        self.code = msg.code;
+        socket.join(msg.code);
+    });
+
+    socket.on("serve", function(msg) {
+        var id = msg.id.trim().toLowerCase();
+        if (id && id != "") {
+            dataService.findById(id)
+                .then(function (response) {
+                    var result = response.Items[0];
+                    var img_url = convertS3URL(result.photosphere.S);
+                    var lidar_url = (result.lidar) ? convertS3URL(result.lidar.S) : "";
+                    var model = {
+                        id: result.id.S,
+                        dateTime: new Date(result.dateTime.S).toDateString(),
+                        photosphere: img_url,
+                        lidar: lidar_url,
+                        tags: result.tags.SS.sort(),
+                        visibility: result.visibility.N,
+                        temperature: result.temperature.N,
+                        dewPoint: result.dewPoint.N,
+                        windDirection: result.windDirection.N,
+                        windSpeed: result.windSpeed.N
+                    };
+                    return model;
+                })
+                .then(function (model) {
+                    socket.to(self.code).emit("display", model);
+                })
+                .catch(function (err) {
+                    console.error(err);
+                });
+        }
+    });
+
+    socket.on("disconnect", function () {
+        socket.leave(self.code);
+    });
+});
+
 //server init
-app.listen(3000, function () {
+http.listen(3000, function () {
     console.log("Express server listening on port 3000");
 });
 

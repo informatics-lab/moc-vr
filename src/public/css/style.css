@@ -322,3 +322,8 @@ a.pure-button:active {
     }
 
 }
+
+.head-id {
+    color: rgb(61, 146, 201);
+    font-size: large;
+}
