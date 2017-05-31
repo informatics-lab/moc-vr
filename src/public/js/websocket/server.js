@@ -26,6 +26,6 @@ AFRAME.registerComponent('websocket-server', {
     tick: function(time) {
         var self = this;
         var camera = document.getElementById("camera");
-        self.socket.emit("sync-server", camera.rotation);
+        self.socket.emit("sync-server", camera.getAttribute("rotation"));
     }
 });

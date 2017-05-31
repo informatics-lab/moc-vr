@@ -1,6 +1,6 @@
 ---
 layout: master.dot
-title: View
+title: Classroom Client
 ---
 
 [[##remotejs:
@@ -14,10 +14,12 @@ title: View
 <div class = "posts">
     <h1 class="content-subhead">Photosphere Classroom Client</h1>
     <div class="post">
+        <script type="text/javascript" src="/js/hud/windbarb.js"></script>
+        <script type="text/javascript" src="/js/hud/hud.js"></script>
         <script type="text/javascript" src="/js/websocket/shared.js"></script>
         <script type="text/javascript" src="/js/websocket/client.js"></script>
-        <a-scene embedded>
-            <a-entity websocket-client position="0 0 0"></a-entity>
+        <a-scene id="scene" embedded>
+            <a-entity websocket-client></a-entity>
             <a-camera id="camera" reverse-mouse-drag="true" position="0 0 0"></a-camera>
             <a-assets id="assets"></a-assets>
             <a-sky id="psky"></a-sky>
