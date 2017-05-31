@@ -400,11 +400,13 @@ io.on("connection", function (socket) {
 
     socket.on("register", function(msg) {
         self.code = msg.code;
-        socket.join(msg.code);
+        console.log("%s joined %s", msg.type, self.code);
+        socket.join(self.code);
     });
 
     socket.on("serve", function(msg) {
         var id = msg.id.trim().toLowerCase();
+        console.log("serving %s to %s", id, self.code);
         if (id && id != "") {
             dataService.findById(id)
                 .then(function (response) {
@@ -426,12 +428,16 @@ io.on("connection", function (socket) {
                     return model;
                 })
                 .then(function (model) {
-                    socket.to(self.code).emit("display", model);
+                    io.in(self.code).emit("display", model);
                 })
                 .catch(function (err) {
                     console.error(err);
                 });
         }
+    });
+
+    socket.on("camera", function(msg) {
+       socket.to(self.code).emit("camera", msg);
     });
 
     socket.on("disconnect", function () {
