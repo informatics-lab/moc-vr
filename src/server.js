@@ -436,8 +436,8 @@ io.on("connection", function (socket) {
         }
     });
 
-    socket.on("camera", function(msg) {
-       socket.to(self.code).emit("camera", msg);
+    socket.on("sync-server", function(msg) {
+        socket.volatile.to(self.code).emit("sync-client", msg);
     });
 
     socket.on("disconnect", function () {
