@@ -31,9 +31,9 @@ AFRAME.registerComponent('websocket-server', {
 
             if(msg.lidar) {
                 var lidar = document.createElement("img");
-                img.setAttribute("id", "plidar");
-                img.setAttribute("crossorigin", "use-credentials");
-                img.setAttribute("src", msg.lidar);
+                lidar.setAttribute("id", "plidar");
+                lidar.setAttribute("crossorigin", "use-credentials");
+                lidar.setAttribute("src", msg.lidar);
                 assets.appendChild(lidar);
             }
 
