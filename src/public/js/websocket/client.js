@@ -17,6 +17,7 @@ AFRAME.registerComponent('websocket-client', {
         socket.on("display", displayPhotosphere);
 
         socket.on("sync-client", function (msg) {
+            //do something with rotation info here
             document.getElementById("camera").setAttribute("rotation", msg);
         });
 
