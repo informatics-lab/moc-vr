@@ -21,12 +21,14 @@ title: Classroom Client
         <script type="text/javascript" src="/js/websocket/shared.js"></script>
         <script type="text/javascript" src="/js/websocket/client.js"></script>
         <a-scene id="scene" embedded>
+            <a-assets id="assets">
+                <img crossorigin="use-credentials" src="/images/target.svg" id="targetImg"></img>
+            </a-assets>
             <a-entity websocket-client></a-entity>
             <a-camera id="camera" reverse-mouse-drag="true" position="0 0 0"
             target-indicator="target: #target;"></a-camera>
-            <a-assets id="assets"></a-assets>
             <a-sky id="psky"></a-sky>
-            <a-entity target  id="target" position="0 0 -5"></a-box>
+            <a-image src="#targetImg" id="target" position="0 0 -5"></a-image>
         </a-scene>
     </div>
 </div>

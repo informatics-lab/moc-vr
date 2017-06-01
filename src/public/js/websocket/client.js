@@ -18,7 +18,6 @@ AFRAME.registerComponent('websocket-client', {
 
         socket.on("sync-client", function (msg) {
             //do something with rotation info here
-            console.log(msg);
             var pos3DVec = msg.targetPosition;
             var posString = pos3DVec.x +" " + pos3DVec.y + " " + pos3DVec.z;
 
