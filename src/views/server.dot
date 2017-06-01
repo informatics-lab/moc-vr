@@ -36,7 +36,12 @@ title: Classroom Server
            <script type="text/javascript" src="/js/websocket/server.js"></script>
            <a-scene id="scene" embedded>
                <a-entity websocket-server></a-entity>
-               <a-camera id="camera" reverse-mouse-drag="true" position="0 0 0"></a-camera>
+               <a-camera id="camera" reverse-mouse-drag="true" position="0 0 0">
+                    <a-box id="target" size="5" position="0 0 -5"></a-box>
+               </a-camera>
+
+
+
                <a-assets id="assets"></a-assets>
                <a-sky id="psky"></a-sky>
            </a-scene>

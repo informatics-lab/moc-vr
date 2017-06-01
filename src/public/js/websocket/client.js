@@ -18,7 +18,14 @@ AFRAME.registerComponent('websocket-client', {
 
         socket.on("sync-client", function (msg) {
             //do something with rotation info here
-            document.getElementById("camera").setAttribute("rotation", msg);
+            console.log(msg);
+            var rot = msg.rotation;
+            var pos = msg.position;
+
+            var serverCamera = document.getElementById('serverCamera');
+            serverCamera.setAttribute('rotation', rot);
+            serverCamera.setAttribute('position', pos);
+            console.log(msg);
         });
 
     }

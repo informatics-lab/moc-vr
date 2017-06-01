@@ -10,7 +10,7 @@ AFRAME.registerComponent('websocket-server', {
         var self = this;
         self. code = genServerCode();
         self.socket = io();
- 
+
         self.socket.emit("register", {type: "server", code: self.code});
 
         self.socket.on("display", displayPhotosphere);
@@ -26,6 +26,11 @@ AFRAME.registerComponent('websocket-server', {
     tick: function(time) {
         var self = this;
         var camera = document.getElementById("camera");
-        self.socket.emit("sync-server", camera.getAttribute("rotation"));
+        var pos = document.getElementById('target').getPosition();
+        console.log(pos);
+        self.socket.emit("sync-server", {
+          rotation: camera.getAttribute("rotation"),
+          position: camera.getAttribute("position")
+      });
     }
 });
