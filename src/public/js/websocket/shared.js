@@ -69,3 +69,40 @@ function displayPhotosphere (msg) {
     document.getElementById("camera").appendChild(dataHud);
 
 }
+
+AFRAME.registerComponent('target', {
+    schema: {
+        width: {type: 'number', default: 0.2},
+        height: {type: 'number', default: 0.2},
+        radius: {type: 'number', default: 0.05}
+    },
+
+    init: function () {
+        var self = this;
+
+        createTarget(self.data.width * 1000, self.data.height * 1000, self.data.radius * 1000)
+            .then(function(canvas){
+                var geometry = new THREE.PlaneBufferGeometry(self.data.width, self.data.height);
+                var texture = new THREE.Texture(canvas);
+                texture.needsUpdate = true;
+                var material = new THREE.MeshBasicMaterial({map: texture, transparent: true});
+                self.el.setObject3D("mesh", new THREE.Mesh(geometry, material));
+            });
+
+    }
+});
+
+function createTarget(width, height, radius) {
+    console.log("creating target");
+
+    var canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+
+    var ctx = canvas.getContext("2d");
+    ctx.beginPath();
+    ctx.arc(width/2, height/2, radius, 0, 2 * Math.PI, false);
+    ctx.fill();
+
+    return canvas;
+}
