@@ -16,14 +16,29 @@ function removeChildrenOfId(id) {
     }
 }
 
+function currentPhotosphere(){
+    var id = null;
+    var element = document.getElementById('scene')
+    if(element){
+        id = element.getAttribute("sphereId");
+    }
+    return id;
+}
+
 function displayPhotosphere (msg) {
     console.log("new photosphere served", msg);
+
+    // Don't update it alread looking at the correct photosphere.
+    if(currentPhotosphere() === msg.id){
+        return;
+    }
 
     removeChildrenOfId("assets");
     removeElementById("lidar-hud");
     removeElementById("data-hud");
 
     //update photosphere
+    var scene = document.getElementById('scene').setAttribute('sphereId', msg.id);
     if(msg.photosphere) {
         var img = document.createElement("img");
         img.setAttribute("id", "pimg");

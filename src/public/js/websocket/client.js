@@ -17,6 +17,7 @@ AFRAME.registerComponent('websocket-client', {
         socket.on("display", displayPhotosphere);
 
         socket.on("sync-client", function (msg) {
+            displayPhotosphere(msg.photosphere); // Update if required;
             //do something with rotation info here
             var pos3DVec = msg.targetPosition;
             var posString = pos3DVec.x +" " + pos3DVec.y + " " + pos3DVec.z;
