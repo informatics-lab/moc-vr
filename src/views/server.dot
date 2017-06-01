@@ -37,7 +37,7 @@ title: Classroom Server
            <a-scene id="scene" embedded>
                <a-entity websocket-server></a-entity>
                <a-camera id="camera" reverse-mouse-drag="true" position="0 0 0">
-                    <a-box id="target" size="5" position="0 0 -5"></a-box>
+                    <a-entity target id="target" position="0 0 -5"></a-box>
                </a-camera>
 
 

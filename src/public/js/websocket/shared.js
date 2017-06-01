@@ -104,5 +104,5 @@ function createTarget(width, height, radius) {
     ctx.arc(width/2, height/2, radius, 0, 2 * Math.PI, false);
     ctx.fill();
 
-    return canvas;
+    return Promise.resolve(canvas);
 }

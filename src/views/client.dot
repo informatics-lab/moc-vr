@@ -22,12 +22,11 @@ title: Classroom Client
         <script type="text/javascript" src="/js/websocket/client.js"></script>
         <a-scene id="scene" embedded>
             <a-entity websocket-client></a-entity>
-            <a-camera id="camera" reverse-mouse-drag="true" position="0 0 0" target-indicator="target: #target;"></a-camera>
+            <a-camera id="camera" reverse-mouse-drag="true" position="0 0 0"
+            target-indicator="target: #target;"></a-camera>
             <a-assets id="assets"></a-assets>
             <a-sky id="psky"></a-sky>
-            <a-box id="serverCamera">
-              <a-box id="target" size="5" position="0 0 -5"></a-box>
-            <a-box>
+            <a-entity target  id="target" position="0 0 -5"></a-box>
         </a-scene>
     </div>
 </div>

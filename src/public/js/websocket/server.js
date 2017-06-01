@@ -25,12 +25,11 @@ AFRAME.registerComponent('websocket-server', {
     },
     tick: function(time) {
         var self = this;
-        var camera = document.getElementById("camera");
-        var pos = document.getElementById('target').getPosition();
-        console.log(pos);
+        var target = document.getElementById("target");
+        var vec = new THREE.Vector3();
+        vec.setFromMatrixPosition(target.object3D.matrixWorld)
         self.socket.emit("sync-server", {
-          rotation: camera.getAttribute("rotation"),
-          position: camera.getAttribute("position")
+          targetPosition:vec
       });
     }
 });
