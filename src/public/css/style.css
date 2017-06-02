@@ -368,6 +368,13 @@ a.pure-button:active {
     padding:.5em .5em;
 }
 
+#copy-pid {
+    cursor: pointer;
+}
+#copy-pid:hover {
+    color: #2A2A2A;
+}
+
 /* prototype ribbon */
 
 .ribbon-wrapper {
