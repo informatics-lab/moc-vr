@@ -13,7 +13,7 @@ AFRAME.registerComponent("websocket-server", {
 
         self.socket.emit("register", {type: "server", code: self.code});
 
-        self.socket.on("display", function(msg){
+        self.socket.on("display", function (msg) {
             self.photosphereData = msg;
             displayPhotosphere(msg);
             self.sendState();
@@ -27,19 +27,18 @@ AFRAME.registerComponent("websocket-server", {
             self.socket.emit("serve", {id: pid});
         });
     },
-    tick: function(time) {
-        this.sendState();
+    tick: function (time) {
+        var self = this;
+        self.sendState();
     },
-
-    sendState: function(){
+    sendState: function () {
         var self = this;
         var target = document.getElementById("target");
         var vec = new THREE.Vector3();
         vec.setFromMatrixPosition(target.object3D.matrixWorld)
         self.socket.emit("sync-server", {
-            targetPosition:vec,
+            targetPosition: vec,
             photosphere: self.photosphereData
         });
     }
-
 });

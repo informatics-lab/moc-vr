@@ -8,8 +8,7 @@ AFRAME.registerComponent('websocket-client', {
 
         if (!code) {
             code = prompt("Enter session code:");
-            console.log('Room code is', code);
-            if(!code){ // If still no code then we can't go on.
+            if (!code) { // If still no code then we can't go on.
                 return;
             }
         }
