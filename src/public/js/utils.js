@@ -1,5 +1,6 @@
 "use strict";
 
+//taken from https://stackoverflow.com/questions/400212/how-do-i-copy-to-the-clipboard-in-javascript
 function copyTextToClipboard(text) {
     var textArea = document.createElement("textarea");
 
@@ -59,8 +60,8 @@ function copyTextToClipboard(text) {
 
 var copyBtn = document.getElementById("copy-pid");
 
-if(copyBtn) {
-    copyBtn.addEventListener('click', function (evt) {
+if (copyBtn) {
+    copyBtn.addEventListener("click", function (evt) {
         copyTextToClipboard(document.getElementById("pid-text").innerText);
     });
 }
