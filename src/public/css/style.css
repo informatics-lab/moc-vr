@@ -40,7 +40,8 @@ h3 {
 
 
 .met-office-logo-lines, .met-office-logo-text {
-    height: 2.0em
+    height: 1.0em;
+    text-align: center
 }
 
 .header {
@@ -51,13 +52,13 @@ h3 {
 
 .header h1{
     margin-top: 0.2em;
-    font-size: 1.5em;
+    font-size: 1.2em;
     font-weight: 300;
 }
 
 .header .logo {
     display: inline-block;
-    height: 3em;
+    height: 4em;
 }
 
 .clear { clear: both;}
@@ -71,6 +72,7 @@ h3 {
 .brand-title,
 .brand-tagline {
     margin: 0;
+    text-align: center;
 }
 
 .brand-title {
@@ -328,15 +330,12 @@ a.pure-button:active {
     }
     .header br {display: none;}
     .met-office-logo-text{ display: none;}
+    .met-office-logo-lines{ display: none; }
     .header h1{
         font-size: 1.5em;
     }
-    .met-office-logo-lines{
-        position: relative;
-        height: 2.5em;
-    }
     .met_office_logo{
-        width: 8em;
+        width: 6em;
     }
     .brand-tagline, .brand-title{
         display: none;
@@ -355,11 +354,19 @@ a.pure-button:active {
     }
 
     .header .logo {
-        width:4em;
+        width:5em;
     }
 
 }
 
+.head-id {
+    color: rgb(61, 146, 201);
+    font-size: large;
+}
+
+.pure-button {
+    padding:.5em .5em;
+}
 
 /* prototype ribbon */
 
