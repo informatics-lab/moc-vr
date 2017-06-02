@@ -20,11 +20,13 @@ title: Sync Server
 
                <div class="pure-control-group">
                    <label for="pid">Photosphere id</label>
-                   <input class="pure-input-2-3" type="text" id="pid" name="pid"/>
+                   <input class="pure-u-1-2" type="text" id="pid" name="pid"/>
+                   <button id="serve" class="pure-button pure-button-primary">serve</button>
                </div>
 
-               <div class="pure-controls">
-                   <button id="serve" class="pure-button pure-button-primary">serve</button>
+               <div class="pure-control-group">
+                    <label for="t">Show target</label>
+                    <input id="t" type="checkbox"/>
                </div>
 
             </fieldset>
@@ -40,7 +42,7 @@ title: Sync Server
                </a-assets>
                <a-entity websocket-server></a-entity>
                <a-camera id="camera" reverse-mouse-drag="true" position="0 0 0">
-                    <a-image src="#targetImg" id="target" position="0 0 -5"></a-image>
+                    <a-image src="#targetImg" id="target" position="0 0 -5" visible="false"></a-image>
                </a-camera>
                <a-sky id="psky"></a-sky>
            </a-scene>

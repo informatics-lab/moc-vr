@@ -26,12 +26,12 @@ function currentPhotosphere() {
 }
 
 function displayPhotosphere(msg) {
-    console.log("new photosphere served", msg);
 
     // Don't update it already looking at the correct photosphere.
     if (currentPhotosphere() === msg.id) {
         return;
     }
+    console.log("new photosphere served", msg);
 
     removeChildrenOfId("assets");
     removeElementById("lidar-hud");

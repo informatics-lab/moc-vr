@@ -1,6 +1,33 @@
 "use strict";
+function displayTarget(targetActive, targetPosition) {
+    var camera = document.getElementById("camera");
+    var target = document.getElementById("target");
+    var visible = target.getAttribute("visible");
 
-AFRAME.registerComponent('websocket-client', {
+    if (targetActive) {
+        if (!camera.getAttribute("target-indicator")) {
+            camera.setAttribute("target-indicator", "target: #target;");
+        }
+        if(!visible) {
+            target.setAttribute("visible", "true");
+        }
+
+        var posString = targetPosition.x + " " + targetPosition.y + " " + targetPosition.z;
+
+        target.setAttribute("position", posString);
+        target.object3D.lookAt(camera.object3D.position);
+
+    } else {
+        if (camera.getAttribute("target-indicator")) {
+            camera.removeAttribute("target-indicator")
+        }
+        if(visible) {
+            target.setAttribute("visible", "false");
+        }
+    }
+}
+
+AFRAME.registerComponent("websocket-client", {
     schema: {},
     init: function () {
         var self = this;
@@ -18,15 +45,7 @@ AFRAME.registerComponent('websocket-client', {
 
         socket.on("sync-client", function (msg) {
             displayPhotosphere(msg.photosphere);
-
-            var pos3DVec = msg.targetPosition;
-            var posString = pos3DVec.x + " " + pos3DVec.y + " " + pos3DVec.z;
-
-            var target = document.getElementById("target");
-            var camera = document.getElementById("camera");
-
-            target.setAttribute("position", posString);
-            target.object3D.lookAt(camera.object3D.position);
+            displayTarget(msg.targetActive, msg.targetPosition);
         });
 
     }
