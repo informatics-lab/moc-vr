@@ -66,7 +66,7 @@ app.get("/edit/:id", users.isAdmin, function (req, res) {
         .then(function (response) {
             var model =   toModel(response, res);
             var result = response.Items[0];
-            model.photosphere_original = result.photosphere.S; // Need to use original S3 url.
+            model.photosphere_original = result.photosphere.S;
             if(result.lidar.S) {
                 model.lidar_original = result.lidar.S;
             }
