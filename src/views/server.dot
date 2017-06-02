@@ -42,10 +42,6 @@ title: Classroom Server
                <a-camera id="camera" reverse-mouse-drag="true" position="0 0 0">
                     <a-image src="#targetImg" id="target" position="0 0 -5"></a-image>
                </a-camera>
-
-
-
-
                <a-sky id="psky"></a-sky>
            </a-scene>
        </div>

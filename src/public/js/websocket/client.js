@@ -1,6 +1,6 @@
 "use strict";
 
-AFRAME.registerComponent('websocket-client', {
+AFRAME.registerComponent("websocket-client", {
     schema: {},
     init: function () {
         var self = this;
@@ -8,7 +8,6 @@ AFRAME.registerComponent('websocket-client', {
 
         if (!code) {
             code = prompt("Enter session code:");
-            console.log(code);
         }
 
         var socket = io();
@@ -17,16 +16,15 @@ AFRAME.registerComponent('websocket-client', {
         socket.on("display", displayPhotosphere);
 
         socket.on("sync-client", function (msg) {
-            displayPhotosphere(msg.photosphere); // Update if required;
-            //do something with rotation info here
+            displayPhotosphere(msg.photosphere);
             var pos3DVec = msg.targetPosition;
-            var posString = pos3DVec.x +" " + pos3DVec.y + " " + pos3DVec.z;
+            var posString = pos3DVec.x + " " + pos3DVec.y + " " + pos3DVec.z;
 
-            var target = document.getElementById('target');
-            var cam = document.getElementById('camera');
+            var target = document.getElementById("target");
+            var camera = document.getElementById("camera");
 
-            target.setAttribute('position', posString);
-            target.object3D.lookAt(cam.object3D.position);
+            target.setAttribute("position", posString);
+            target.object3D.lookAt(camera.object3D.position);
         });
 
     }

@@ -6,19 +6,19 @@ var express = require("express"),
     http = require("http").Server(app),
     io = require("socket.io")(http);
 var engine = require("express-dot-engine");
-var proxy = require('express-http-proxy');
+var proxy = require("express-http-proxy");
 var path = require("path");
 var uuid = require("node-uuid");
 var dataService = require("./mocvr-data-service");
 var users = require("./users");
 
 //set doT to render our view templates
-app.engine('dot', engine.__express);
-app.set('views', path.join(__dirname, './views'));
-app.set('view engine', 'dot');
+app.engine("dot", engine.__express);
+app.set("views", path.join(__dirname, "./views"));
+app.set("view engine", "dot");
 app.use(fileUpload());
 app.use(express.static(__dirname + "/public"));
-app.use('/img/', proxy('moc-vr.s3-eu-west-1.amazonaws.com/', {
+app.use("/img/", proxy("moc-vr.s3-eu-west-1.amazonaws.com/", {
     decorateRequest: function (proxyReq, originalReq) {
         proxyReq.headers["Authorization"] = "";
         proxyReq.headers["Cookie"] = "";
@@ -47,7 +47,7 @@ app.get("/", function (req, res) {
             return tags;
         })
         .then(function (tags) {
-            res.render('index', {tags: Object.keys(tags).sort()})
+            res.render("index", {tags: Object.keys(tags).sort()})
         })
         .catch(function (err) {
             console.error(err);

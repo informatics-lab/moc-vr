@@ -4,16 +4,16 @@ function genServerCode() {
     return Math.floor(100000 + Math.random() * 900000).toString().substring(0, 4);
 }
 
-AFRAME.registerComponent('websocket-server', {
+AFRAME.registerComponent("websocket-server", {
     schema: {},
     init: function () {
         var self = this;
-        self. code = genServerCode();
+        self.code = genServerCode();
         self.socket = io();
 
         self.socket.emit("register", {type: "server", code: self.code});
 
-        self.socket.on("display", function(msg){
+        self.socket.on("display", function (msg) {
             self.photosphereData = msg;
             displayPhotosphere(msg);
         });
@@ -25,14 +25,14 @@ AFRAME.registerComponent('websocket-server', {
             self.socket.emit("serve", {id: pid});
         });
     },
-    tick: function(time) {
+    tick: function (time) {
         var self = this;
         var target = document.getElementById("target");
         var vec = new THREE.Vector3();
         vec.setFromMatrixPosition(target.object3D.matrixWorld)
         self.socket.emit("sync-server", {
-          targetPosition:vec,
-          photosphere: self.photosphereData
-      });
+            targetPosition: vec,
+            photosphere: self.photosphereData
+        });
     }
 });
