@@ -384,11 +384,15 @@ app.get("/delete/:id", users.isAdmin, function (req, res) {
         });
 });
 
-app.get("/client", function (req, res) {
+app.get("/sync", function(req, res) {
+    res.render("sync");
+});
+
+app.get("/sync/client", function (req, res) {
     res.render("client");
 });
 
-app.get("/server", function (req, res) {
+app.get("/sync/server", function (req, res) {
     res.render("server");
 });
 

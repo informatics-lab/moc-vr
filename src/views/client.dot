@@ -1,6 +1,6 @@
 ---
 layout: master.dot
-title: Classroom Client
+title: Sync Client
 ---
 
 [[##remotejs:
@@ -14,7 +14,7 @@ title: Classroom Client
 
 [[##content:
 <div class = "posts">
-    <h1 class="content-subhead">Photosphere Classroom Client</h1>
+    <h1 class="content-subhead">Photosphere Sync Client</h1>
     <div class="post">
         <script type="text/javascript" src="/js/hud/windbarb.js"></script>
         <script type="text/javascript" src="/js/hud/hud.js"></script>

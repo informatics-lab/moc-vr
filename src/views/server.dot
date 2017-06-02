@@ -1,6 +1,6 @@
 ---
 layout: master.dot
-title: Classroom Server
+title: Sync Server
 ---
 
 [[##remotejs:
@@ -12,7 +12,7 @@ title: Classroom Server
 
 [[##content:
 <div class = "posts">
-    <h1 class="content-subhead">Photosphere Classroom Server <span class="head-id" id="sid"></span></h1>
+    <h1 class="content-subhead">Photosphere Sync Server <span class="head-id" id="sid"></span></h1>
 
     <div class="post">
         <form class="pure-form pure-form-aligned" action="javascript:void(0);">
@@ -42,10 +42,6 @@ title: Classroom Server
                <a-camera id="camera" reverse-mouse-drag="true" position="0 0 0">
                     <a-image src="#targetImg" id="target" position="0 0 -5"></a-image>
                </a-camera>
-
-
-
-
                <a-sky id="psky"></a-sky>
            </a-scene>
        </div>

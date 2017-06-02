@@ -1,0 +1,13 @@
+---
+layout: master.dot
+title: Sync
+---
+
+[[##content:
+<div class="posts">
+    <h1 class="content-subhead">Photosphere Sync</h1>
+        <a class="pure-button" href="/sync/server">Server</a>
+        <a class="pure-button" href="/sync/client">Client</a>
+    </div>
+</div>
+#]]
