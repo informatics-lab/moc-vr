@@ -211,17 +211,18 @@ function createHUD(width, height, bg, visibility, temperature, dewPoint, windDir
     drawBackground(ctx, bg);
     drawVisibility(ctx, visibility);
     drawTempInstruments(ctx, temperature, dewPoint);
-    drawTime(ctx, time);
+    drawTime(ctx, time, windDirection);
 
     return drawWindBarb(ctx, windDirection, windSpeed).then(function(){
         return canvas;
     });
 }
 
-function drawTime(ctx, time) {
+function drawTime(ctx, time, windDirection) {
+    var yOffset = ((windDirection + 90) % 360) > 180 ? 30 : 120
     ctx.fillStyle = "#000000";
     ctx.font = '22px monospace';
-    ctx.fillText(time, 80, 120);
+    ctx.fillText(time, 80, yOffset);
 }
 
 function drawBackground(ctx, bg) {
