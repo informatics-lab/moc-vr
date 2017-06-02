@@ -65,22 +65,10 @@ app.get("/edit/:id", users.isAdmin, function (req, res) {
     dataService.findById(id)
         .then(function (response) {
             var result = response.Items[0];
-            var img_url = "/img" + decodeURIComponent(result.photosphere.S).split("amazonaws.com")[1];
-            var model = {
-                id: result.id.S,
-                uploadDateTime: new Date(result.uploaded.S).toDateString(),
-                dateTime: result.dateTime.S,
-                photosphere: img_url,
-                photosphere_original: decodeURIComponent(result.photosphere.S),
-                tags: result.tags.SS,
-                visibility: result.visibility.N,
-                temperature: result.temperature.N,
-                dewPoint: result.dewPoint.N,
-                windDirection: result.windDirection.N,
-                windSpeed: result.windSpeed.N,
-            };
-            if (result.lidar) {
-                model.lidar = decodeURIComponent(result.lidar.S);
+            var model =  toModel(response, res)
+
+            if (!model.lidar) {
+                delete model.lidar;
             }
             if (result.windGust) {
                 model.windGust = result.windGust.N;
@@ -108,24 +96,8 @@ app.get("/view/:id", users.isAdmin, function (req, res) {
     var id = req.params.id.trim();
     if (id && id != "") {
         dataService.findById(id)
-            .then(function (response) {
-                var result = response.Items[0];
-                var img_url = convertS3URL(result.photosphere.S);
-                var lidar_url = (result.lidar) ? convertS3URL(result.lidar.S) : "";
-                var model = {
-                    admin: res.locals.user.admin,
-                    id: result.id.S,
-                    dateTime: new Date(result.dateTime.S).toDateString(),
-                    photosphere: img_url,
-                    lidar: lidar_url,
-                    tags: result.tags.SS.sort(),
-                    visibility: result.visibility.N,
-                    temperature: result.temperature.N,
-                    dewPoint: result.dewPoint.N,
-                    windDirection: result.windDirection.N,
-                    windSpeed: result.windSpeed.N
-                };
-                return model;
+            .then(function(response){
+                return toModel(response, res);
             })
             .then(function (model) {
                 res.render("view", model);
@@ -411,23 +383,8 @@ io.on("connection", function (socket) {
         console.log("serving %s to %s", id, self.code);
         if (id && id != "") {
             dataService.findById(id)
-                .then(function (response) {
-                    var result = response.Items[0];
-                    var img_url = convertS3URL(result.photosphere.S);
-                    var lidar_url = (result.lidar) ? convertS3URL(result.lidar.S) : "";
-                    var model = {
-                        id: result.id.S,
-                        dateTime: new Date(result.dateTime.S).toDateString(),
-                        photosphere: img_url,
-                        lidar: lidar_url,
-                        tags: result.tags.SS.sort(),
-                        visibility: result.visibility.N,
-                        temperature: result.temperature.N,
-                        dewPoint: result.dewPoint.N,
-                        windDirection: result.windDirection.N,
-                        windSpeed: result.windSpeed.N
-                    };
-                    return model;
+                .then(function(response){
+                    return toModel(response);
                 })
                 .then(function (model) {
                     io.in(self.code).emit("display", model);
@@ -454,4 +411,27 @@ http.listen(3000, function () {
 
 function convertS3URL(url) {
     return "/img" + decodeURIComponent(url).split("amazonaws.com")[1];
+}
+
+function toModel(response, res){
+    var result = response.Items[0];
+    var img_url = convertS3URL(result.photosphere.S);
+    var lidar_url = (result.lidar) ? convertS3URL(result.lidar.S) : "";
+    var dateTime = new Date(result.dateTime.S);
+    var timeStr = dateTime.toTimeString().split(':')[0] + ':' + dateTime.toTimeString().split(':')[1]+ 'Z';
+    var model = {
+        admin: (res)? res.locals.user.admin : false,
+        id: result.id.S,
+        date: dateTime.toDateString(),
+        time: timeStr,
+        photosphere: img_url,
+        lidar: lidar_url,
+        tags: result.tags.SS.sort(),
+        visibility: result.visibility.N,
+        temperature: result.temperature.N,
+        dewPoint: result.dewPoint.N,
+        windDirection: result.windDirection.N,
+        windSpeed: result.windSpeed.N
+    };
+    return model;
 }

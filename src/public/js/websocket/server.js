@@ -18,7 +18,6 @@ AFRAME.registerComponent("websocket-server", {
             self.photosphereData = msg;
             displayPhotosphere(msg);
             self.sendState();
-            setInterval(self.sendState(), 500);
         });
 
         document.getElementById("sid").innerHTML = self.code;

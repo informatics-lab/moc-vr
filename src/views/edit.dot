@@ -30,7 +30,7 @@ title: Edit
 
             <div class="pure-control-group">
                 <label for="dt">date time</label>
-                <input type="text" name="dt" id="dt" value="[[= model.dateTime]]"/>
+                <input type="text" name="dt" id="dt" value="[[= model.date]]"/>
             </div>
 
             <div class="pure-control-group">

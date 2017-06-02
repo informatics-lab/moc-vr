@@ -26,7 +26,9 @@ title: Sync Client
             </a-assets>
             <a-entity websocket-client></a-entity>
             <a-camera id="camera" reverse-mouse-drag="true" position="0 0 0"
-            target-indicator="target: #target;"></a-camera>
+                target-indicator="target: #target;">
+                
+            </a-camera>
             <a-sky id="psky"></a-sky>
             <a-image src="#targetImg" id="target" visible="false" position="0 0 -5"></a-image>
         </a-scene>
