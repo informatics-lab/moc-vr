@@ -64,17 +64,11 @@ app.get("/edit/:id", users.isAdmin, function (req, res) {
     }
     dataService.findById(id)
         .then(function (response) {
+            var model =   toModel(response, res);
             var result = response.Items[0];
-            var model =  toModel(response, res)
-
-            if (!model.lidar) {
-                delete model.lidar;
-            }
-            if (result.windGust) {
-                model.windGust = result.windGust.N;
-            }
-            if (result.heading) {
-                model.heading = result.heading.N;
+            model.photosphere_original = result.photosphere.S; // Need to use original S3 url.
+            if(result.lidar.S) {
+                model.lidar_original = result.lidar.S;
             }
             return model;
         })
@@ -431,7 +425,15 @@ function toModel(response, res){
         temperature: result.temperature.N,
         dewPoint: result.dewPoint.N,
         windDirection: result.windDirection.N,
-        windSpeed: result.windSpeed.N
+        windSpeed: result.windSpeed.N,
+        uploadDate: new Date(result.uploaded.S).toDateString()
     };
+
+    if (result.windGust) {
+        model.windGust = result.windGust.N;
+    }
+    if (result.heading) {
+        model.heading = result.heading.N;
+    }
     return model;
 }

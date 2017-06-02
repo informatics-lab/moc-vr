@@ -16,7 +16,7 @@ title: Edit
     >
         <fieldset>
 
-            <p class="post-meta">Last Editted [[= model.uploadDateTime]]</p>
+            <p class="post-meta">Last Editted [[= model.uploadDate]]</p>
 
             <br />
             <img class="pure-u-1" src="[[= model.photosphere]]-medium" />
@@ -25,7 +25,7 @@ title: Edit
             <br />
 
             <input type="hidden" name="p" id="p" value="[[= model.photosphere_original]]"/>
-            <input type="hidden" name="l" id="l" value="[[= model.lidar]]"/>
+            <input type="hidden" name="l" id="l" value="[[= model.lidar_original]]"/>
             <input type="hidden" name="h" id="h" value="[[= model.heading]]"/>
 
             <div class="pure-control-group">
