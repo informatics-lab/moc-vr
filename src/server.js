@@ -392,8 +392,6 @@ app.get("/server", function (req, res) {
     res.render("server");
 });
 
-var sessions = {};
-
 io.on("connection", function (socket) {
 
     var self = this;

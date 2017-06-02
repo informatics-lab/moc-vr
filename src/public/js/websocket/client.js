@@ -1,6 +1,6 @@
 "use strict";
 
-AFRAME.registerComponent("websocket-client", {
+AFRAME.registerComponent('websocket-client', {
     schema: {},
     init: function () {
         var self = this;
@@ -8,15 +8,18 @@ AFRAME.registerComponent("websocket-client", {
 
         if (!code) {
             code = prompt("Enter session code:");
+            console.log('Room code is', code);
+            if(!code){ // If still no code then we can't go on.
+                return;
+            }
         }
 
         var socket = io();
         socket.emit("register", {type: "client", code: code});
 
-        socket.on("display", displayPhotosphere);
-
         socket.on("sync-client", function (msg) {
             displayPhotosphere(msg.photosphere);
+
             var pos3DVec = msg.targetPosition;
             var posString = pos3DVec.x + " " + pos3DVec.y + " " + pos3DVec.z;
 
