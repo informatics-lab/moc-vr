@@ -68,12 +68,12 @@ title: View
                     <div class="pure-u-1 pure-u-md-1-2">
                         <div class="pure-control-group">
                             <label>temperature</label>
-                            <input class="pure-u-1-6" disabled type="number" placeholder="[[= model.temperature]]">
+                            <input class="pure-u-1-4" disabled type="number" placeholder="[[= model.temperature]]">
                             <span class="pure-form-message-inline">&deg;C</span>
                         </div>
                         <div class="pure-control-group">
                             <label>dew point</label>
-                            <input class="pure-u-1-6" disabled type="number" placeholder="[[= model.dewPoint]]">
+                            <input class="pure-u-1-4" disabled type="number" placeholder="[[= model.dewPoint]]">
                             <span class="pure-form-message-inline">&deg;C</span>
                         </div>
                         <div class="pure-control-group">
@@ -86,12 +86,12 @@ title: View
                     <div class="pure-u-1 pure-u-md-1-2">
                         <div class="pure-control-group">
                             <label>wind direction</label>
-                            <input class="pure-u-1-6" disabled type="number" placeholder="[[= model.windDirection]]">
+                            <input class="pure-u-1-4" disabled type="number" placeholder="[[= model.windDirection]]">
                             <span class="pure-form-message-inline">kn</span>
                         </div>
                         <div class="pure-control-group">
                             <label>wind speed</label>
-                            <input class="pure-u-1-6" disabled type="number" placeholder="[[= model.windSpeed]]">
+                            <input class="pure-u-1-4" disabled type="number" placeholder="[[= model.windSpeed]]">
                             <span class="pure-form-message-inline">kn</span>
                         </div>
                         [[? model.windGust]]
