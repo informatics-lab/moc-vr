@@ -33,7 +33,8 @@ function displayPhotosphere(msg) {
     }
     console.log("new photosphere served", msg);
 
-    removeChildrenOfId("assets");
+    removeElementById("pimg");
+    removeElementById("plidar");
     removeElementById("lidar-hud");
     removeElementById("data-hud");
 
