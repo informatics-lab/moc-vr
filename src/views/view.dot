@@ -68,17 +68,17 @@ title: View
                     <div class="pure-u-1 pure-u-md-1-2">
                         <div class="pure-control-group">
                             <label>temperature</label>
-                            <input disabled type="number" placeholder="[[= model.temperature]]">
+                            <input class="pure-u-1-6" disabled type="number" placeholder="[[= model.temperature]]">
                             <span class="pure-form-message-inline">&deg;C</span>
                         </div>
                         <div class="pure-control-group">
                             <label>dew point</label>
-                            <input disabled type="number" placeholder="[[= model.dewPoint]]">
+                            <input class="pure-u-1-6" disabled type="number" placeholder="[[= model.dewPoint]]">
                             <span class="pure-form-message-inline">&deg;C</span>
                         </div>
                         <div class="pure-control-group">
                             <label>visibility</label>
-                            <input disabled type="number" placeholder="[[= model.visibility]]">
+                            <input class="pure-u-1-4" disabled type="number" placeholder="[[= model.visibility]]">
                             <span class="pure-form-message-inline">m</span>
                         </div>
                     </div>
@@ -86,18 +86,18 @@ title: View
                     <div class="pure-u-1 pure-u-md-1-2">
                         <div class="pure-control-group">
                             <label>wind direction</label>
-                            <input disabled type="number" placeholder="[[= model.windDirection]]">
+                            <input class="pure-u-1-6" disabled type="number" placeholder="[[= model.windDirection]]">
                             <span class="pure-form-message-inline">kn</span>
                         </div>
                         <div class="pure-control-group">
                             <label>wind speed</label>
-                            <input disabled type="number" placeholder="[[= model.windSpeed]]">
+                            <input class="pure-u-1-6" disabled type="number" placeholder="[[= model.windSpeed]]">
                             <span class="pure-form-message-inline">kn</span>
                         </div>
                         [[? model.windGust]]
                         <div class="pure-control-group">
                             <label>wind gust</label>
-                            <input disabled type="number" placeholder="[[= model.windGust]]">
+                            <input class="pure-u-1-6" disabled type="number" placeholder="[[= model.windGust]]">
                             <span class="pure-form-message-inline">kn</span>
                         </div>
                         [[?]]
