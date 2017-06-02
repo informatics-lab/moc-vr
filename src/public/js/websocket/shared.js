@@ -71,6 +71,7 @@ function displayPhotosphere(msg) {
         lidarHud.setAttribute("position", "0 0 0");
         lidarHud.setAttribute("rotation", "0 0 0");
         lidarHud.setAttribute("scale", "2 2 2");
+
         document.getElementById("scene").appendChild(lidarHud);
     }
 
@@ -78,7 +79,9 @@ function displayPhotosphere(msg) {
     var dataHud = document.createElement("a-entity");
     dataHud.setAttribute("id", "data-hud");
     dataHud.setAttribute("hud-toggler", "name:'Data HUD'; order:1");
-    dataHud.setAttribute("data-hud", "width:0.7; height:0.6; background:#FFF; visibility:" + msg.visibility + "; temperature:" + msg.temperature + "; dewPoint:" + msg.dewPoint + "; windDirection:" + msg.windDirection + "; windSpeed:" + msg.windSpeed + ";");
+    dataHud.setAttribute("data-hud", "width:0.7; height:0.6; background:#FFF; visibility:" + msg.visibility
+                            + "; temperature:" + msg.temperature + "; dewPoint:" + msg.dewPoint + "; windDirection:" + msg.windDirection
+                            + "; windSpeed:" + msg.windSpeed + "; time:" + msg.time);
     dataHud.setAttribute("visible", "false");
     dataHud.setAttribute("position", "0.1 0.05 -0.65");
     document.getElementById("camera").appendChild(dataHud);

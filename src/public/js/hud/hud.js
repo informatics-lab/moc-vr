@@ -165,7 +165,8 @@ AFRAME.registerComponent('data-hud', {
         temperature: {type: 'number'},
         dewPoint: {type: 'number'},
         windDirection: {type: 'number'},
-        windSpeed: {type: 'number'}
+        windSpeed: {type: 'number'},
+        time: {type: 'string'}
     },
 
 
@@ -186,7 +187,7 @@ AFRAME.registerComponent('data-hud', {
         self.viewNames.push('Data HUD');
         createHUD(data.width * 1000, data.height * 1000,
              data.background, data.visibility, data.temperature, data.dewPoint,
-             data.windDirection, data.windSpeed)
+             data.windDirection, data.windSpeed, data.time)
         .then(function(canvas){
             var geometry = new THREE.PlaneBufferGeometry(data.width, data.height);
             var texture = new THREE.Texture(canvas);
@@ -199,7 +200,7 @@ AFRAME.registerComponent('data-hud', {
 
 
 // returns the hud canvas dom element
-function createHUD(width, height, bg, visibility, temperature, dewPoint, windDirection, windSpeed) {
+function createHUD(width, height, bg, visibility, temperature, dewPoint, windDirection, windSpeed, time) {
     console.log("creating HUD");
 
     var canvas = document.createElement("canvas");
@@ -210,10 +211,17 @@ function createHUD(width, height, bg, visibility, temperature, dewPoint, windDir
     drawBackground(ctx, bg);
     drawVisibility(ctx, visibility);
     drawTempInstruments(ctx, temperature, dewPoint);
+    drawTime(ctx, time);
 
     return drawWindBarb(ctx, windDirection, windSpeed).then(function(){
         return canvas;
     });
+}
+
+function drawTime(ctx, time) {
+    ctx.fillStyle = "#000000";
+    ctx.font = '22px monospace';
+    ctx.fillText(time, 80, 120);
 }
 
 function drawBackground(ctx, bg) {

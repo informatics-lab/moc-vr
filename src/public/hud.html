@@ -19,7 +19,8 @@
         visibility: 6300,
         windDirection: 0,
         windSpeed: 76,
-        windGust: 24
+        windGust: 24,
+        time: "11:29Z"
     };
 
     var width = 800;
@@ -27,7 +28,7 @@
 
     window.onload = function () {
         var parent = document.getElementById("container");
-        createHUD(width, height, "#000", data.visibility, data.temperature, data.dewPoint, data.windDirection, data.windSpeed).then(function (canvas) {
+        createHUD(width, height, "#000", data.visibility, data.temperature, data.dewPoint, data.windDirection, data.windSpeed, data.time).then(function (canvas) {
             parent.appendChild(canvas);
         });
     };

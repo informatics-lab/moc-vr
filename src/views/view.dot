@@ -17,7 +17,7 @@ title: View
             [[? model.admin]]
             <a href="/edit/[[= model.id]]" title="edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
             [[?]]
-            Observed [[= model.dateTime]] tagged as:
+            Observed [[= model.date]] tagged as:
             [[~ model.tags :value:index]]
             <a class="post-category" href="/tag/[[= value]]#avaliable_tags">[[= value]]</a>
             [[~]]
@@ -29,7 +29,10 @@ title: View
         <a-scene embedded>
             <a-camera id="camera" reverse-mouse-drag="true" position="0 0 0">
                 <a-entity hud-toggler="name:'Data HUD'; order:1"
-                          data-hud="width:0.7; height:0.6; background:#FFF; visibility:[[= model.visibility]]; temperature:[[= model.temperature]]; dewPoint:[[= model.dewPoint]]; windDirection:[[= model.windDirection]]; windSpeed:[[= model.windSpeed]]"
+                          data-hud="width:0.7; height:0.6; background:#FFF;
+                          visibility:[[= model.visibility]]; temperature:[[= model.temperature]];
+                          dewPoint:[[= model.dewPoint]]; windDirection:[[= model.windDirection]];
+                          windSpeed:[[= model.windSpeed]]; time:[[= model.time]]"
                           position="0.1 0.05 -0.65"
                           visible="false">
 
