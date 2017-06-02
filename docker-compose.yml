@@ -3,12 +3,14 @@ services:
 
   moc-vr:
     image: quay.io/informaticslab/moc-vr:latest
+    restart: always
     environment:
     - MOC_VR_AWS_ACCESS_KEY_ID=${MOC_VR_AWS_ACCESS_KEY_ID}
     - MOC_VR_AWS_SECRET_ACCESS_KEY=${MOC_VR_AWS_SECRET_ACCESS_KEY}
 
   oauth2_proxy:
     image: skippy/oauth2_proxy
+    restart: always
     environment:
     - OAUTH2_PROXY_CLIENT_ID=${MOC_VR_OAUTH_CLIENT_ID}
     - OAUTH2_PROXY_CLIENT_SECRET=${MOC_VR_OAUTH_CLIENT_SECRET}
@@ -23,6 +25,7 @@ services:
 
   watchtower:
     image: v2tec/watchtower
+    restart: always
     volumes:
     - /var/run/docker.sock:/var/run/docker.sock
     command: --interval 30
