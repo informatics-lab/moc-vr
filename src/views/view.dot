@@ -11,7 +11,7 @@ title: View
 
 [[##content:
 <div class = "posts">
-    <h1 class="content-subhead">Photosphere Observation <span id="pid-text" class="head-id">[[= model.id]]</span> <i id="copy-pid" class="fa fa-clipboard" aria-hidden="true"></i></h1>
+    <h1 class="content-subhead">Photosphere Observation <span id="pid-text" class="head-id">[[= model.id]]</span> <i id="copy-pid" title="copy id" class="fa fa-clipboard" aria-hidden="true"></i></h1>
     <div class="post">
         <p class="post-meta">
             [[? model.admin]]
