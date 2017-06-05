@@ -38,7 +38,7 @@ title: Sync Server
            <script type="text/javascript" src="/js/websocket/server.js"></script>
            <a-scene id="scene" embedded>
                <a-assets id="assets">
-                   <img crossorigin="use-credentials" src="/images/target.svg" id="targetImg"></img>
+                   <img src="/images/target.svg" id="targetImg"></img>
                </a-assets>
                <a-entity websocket-server></a-entity>
                <a-camera id="camera" reverse-mouse-drag="true" position="0 0 0">

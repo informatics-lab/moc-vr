@@ -17,7 +17,7 @@ app.engine("dot", engine.__express);
 app.set("views", path.join(__dirname, "./views"));
 app.set("view engine", "dot");
 app.use(fileUpload());
-app.use(express.static(__dirname + "/public"));
+app.use(express.static(__dirname + "/public", { maxage: 31536000 }));
 app.use("/img/", proxy("moc-vr.s3-eu-west-1.amazonaws.com/", {
     decorateRequest: function (proxyReq, originalReq) {
         proxyReq.headers["Authorization"] = "";
