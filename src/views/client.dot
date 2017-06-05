@@ -22,7 +22,7 @@ title: Sync Client
         <script type="text/javascript" src="/js/websocket/client.js"></script>
         <a-scene id="scene" embedded>
             <a-assets id="assets">
-                <img src="/images/target.svg" id="targetImg"></img>
+                <img crossorigin="use-credentials" src="/images/target.svg" id="targetImg"></img>
             </a-assets>
             <a-entity websocket-client></a-entity>
             <a-camera id="camera" reverse-mouse-drag="true" position="0 0 0"></a-camera>
