@@ -2,18 +2,18 @@
 
 var users = {
     admins: [
-        "t.powell.meto@gmail.com",
+        "tpowellmeto",
         "anthony.duke@metoffice.gov.uk",
         "james.salter@metoffice.gov.uk",
-        "tam203@gmail.com"
+        "tam203"
     ]
 };
 
 exports.isAdmin = function (req, res, next) {
-    if (users.admins.includes(req.headers["x-forwarded-email"])) {
+    if (users.admins.includes(req.user.username)) {
         res.locals.user = {admin: true};
     } else {
         res.locals.user = {admin: false};
     }
-    next();
+    return next();
 };

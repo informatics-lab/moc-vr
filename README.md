@@ -9,7 +9,10 @@ You will need a valid `Github` account and an `AWS IAM` with keys to access `s3`
 
 ## Building and Running in Dev with Docker Compose
 Ensure you have `Docker` installed.  
-Edit your `/etc/hosts` file adding `docker-machine` as the alias for the ip address of your docker-machine VM.    
+Edit your `/etc/hosts` file adding `docker-machine` as the alias for the ip address of your docker-machine VM.
+Ensure `https://github.com/organizations/met-office-lab/settings/applications/505508` has the following properties set:
+ * `Homepage URL` : `http://docker-machine`
+ * `Authorization callback URL` : `http://docker-machine/auth/github/callback`
 Navigate to the project folder and run `docker-compose -f dev-docker-compose.yml up -d --build`.    
 Service is now running on `http://docker-machine`.    
 
@@ -36,6 +39,3 @@ To redeploy the service on the same infrastructure:
 # Credits
 Used to handle multipart uploads  
 https://github.com/richardgirges/express-fileupload
-
-Used to handle authentication  
-https://github.com/bitly/oauth2_proxy

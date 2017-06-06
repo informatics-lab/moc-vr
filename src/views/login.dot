@@ -1,0 +1,11 @@
+---
+layout: master.dot
+title: Edit
+---
+
+[[##content:
+<div class = "posts">
+    <h1 class="content-subhead">Login</h1>
+    <a class="pure-button" href="/auth/github">Login with GitHub</a>
+</div>
+#]]

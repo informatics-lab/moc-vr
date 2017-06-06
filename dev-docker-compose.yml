@@ -6,19 +6,9 @@ services:
     environment:
     - MOC_VR_AWS_ACCESS_KEY_ID=${MOC_VR_AWS_ACCESS_KEY_ID}
     - MOC_VR_AWS_SECRET_ACCESS_KEY=${MOC_VR_AWS_SECRET_ACCESS_KEY}
-
-  oauth2_proxy:
-    image: skippy/oauth2_proxy
-    environment:
-    - OAUTH2_PROXY_CLIENT_ID=${DEV_MOC_VR_OAUTH_CLIENT_ID}
-    - OAUTH2_PROXY_CLIENT_SECRET=${DEV_MOC_VR_OAUTH_CLIENT_SECRET}
-    - OAUTH2_PROXY_COOKIE_SECRET=${MOC_VR_OAUTH_COOKIE_SECRET}
+    - MOC_VR_OAUTH_CLIENT_ID=${DEV_MOC_VR_OAUTH_CLIENT_ID}
+    - MOC_VR_OAUTH_CLIENT_SECRET=${DEV_MOC_VR_OAUTH_CLIENT_SECRET}
+    - DOMAIN=${DEV_DOMAIN}
+    - SESSION_SECRET=${SESSION_SECRET}
     ports:
-    - 80:4180
-    links:
-    - moc-vr
-    volumes:
-    - ./dev-oauth2_proxy.cfg:/etc/dev-oauth2_proxy.cfg
-    command: -config /etc/dev-oauth2_proxy.cfg -provider github
-
-
+    - 80:3000

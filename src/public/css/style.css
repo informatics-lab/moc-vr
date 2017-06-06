@@ -375,6 +375,11 @@ a.pure-button:active {
     color: #2A2A2A;
 }
 
+.app_logo a {
+    text-decoration: none;
+    color: white;
+}
+
 /* prototype ribbon */
 
 .ribbon-wrapper {
