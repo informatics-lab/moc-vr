@@ -9,8 +9,11 @@
     "express": "^4.14.1",
     "express-dot-engine": "^1.0.7",
     "express-http-proxy": "^0.11.0",
+    "express-session": "^1.15.3",
     "fs-extra": "^0.22.1",
     "node-uuid": "^1.4.7",
+    "passport": "^0.3.2",
+    "passport-github2": "^0.1.10",
     "socket.io": "^2.0.1",
     "streamifier": "^0.1.1"
   },

@@ -11,6 +11,46 @@ var path = require("path");
 var uuid = require("node-uuid");
 var dataService = require("./mocvr-data-service");
 var users = require("./users");
+var passport = require("passport");
+var session = require("express-session");
+var GitHubStrategy = require("passport-github2").Strategy;
+
+// Passport session setup.
+//   To support persistent login sessions, Passport needs to be able to
+//   serialize users into and deserialize users out of the session.  Typically,
+//   this will be as simple as storing the user ID when serializing, and finding
+//   the user by ID when deserializing.  However, since this example does not
+//   have a database of user records, the complete GitHub profile is serialized
+//   and deserialized.
+passport.serializeUser(function(user, done) {
+    done(null, user);
+});
+
+passport.deserializeUser(function(obj, done) {
+    done(null, obj);
+});
+
+//   Use the GitHubStrategy within Passport.
+//   Strategies in Passport require a `verify` function, which accept
+//   credentials (in this case, an accessToken, refreshToken, and GitHub
+//   profile), and invoke a callback with a user object.
+passport.use(new GitHubStrategy({
+        clientID: process.env.MOC_VR_OAUTH_CLIENT_ID,
+        clientSecret: process.env.MOC_VR_OAUTH_CLIENT_SECRET,
+        callbackURL: "http://" + process.env.DOMAIN + "/auth/github/callback"
+    },
+    function(accessToken, refreshToken, profile, done) {
+        // asynchronous verification, for effect...
+        process.nextTick(function () {
+
+            // To keep the example simple, the user's GitHub profile is returned to
+            // represent the logged-in user.  In a typical application, you could
+            // associate the GitHub account with a user record in your database,
+            // and return that user instead.
+            return done(null, profile);
+        });
+    }
+));
 
 //set doT to render our view templates
 app.engine("dot", engine.__express);
@@ -27,10 +67,50 @@ app.use("/img/", proxy("moc-vr.s3-eu-west-1.amazonaws.com/", {
         return proxyReq;
     }
 }));
+app.use(session({ secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: false }));
+// Initialize Passport!  Also use passport.session() middleware, to support
+// persistent login sessions (recommended).
+app.use(passport.initialize());
+app.use(passport.session());
 
+
+// Simple route middleware to ensure user is authenticated.
+//   Use this route middleware on any resource that needs to be protected.  If
+//   the request is authenticated (typically via a persistent login session),
+//   the request will proceed.  Otherwise, the user will be redirected to the
+//   login page.
+function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect("/login")
+}
+
+// GET /auth/github
+//   Use passport.authenticate() as route middleware to authenticate the
+//   request.  The first step in GitHub authentication will involve redirecting
+//   the user to github.com.  After authorization, GitHub will redirect the user
+//   back to this application at /auth/github/callback
+app.get("/auth/github",
+    passport.authenticate("github", { scope: [ "user:email" ] }),
+    function(req, res){
+        // The request will be redirected to GitHub for authentication, so this
+        // function will not be called.
+    });
+
+// GET /auth/github/callback
+//   Use passport.authenticate() as route middleware to authenticate the
+//   request.  If authentication fails, the user will be redirected back to the
+//   login page.  Otherwise, the primary route function will be called,
+//   which, in this example, will redirect the user to the home page.
+app.get("/auth/github/callback",
+    passport.authenticate("github", { failureRedirect: "/login" }),
+    function(req, res) {
+        res.redirect("/");
+    });
 
 //view endpoints
-app.get("/", function (req, res) {
+app.get("/", ensureAuthenticated, function (req, res) {
 
     dataService.listTags()
         .then(function (data) {
@@ -56,7 +136,16 @@ app.get("/", function (req, res) {
 
 });
 
-app.get("/edit/:id", users.isAdmin, function (req, res) {
+app.get("/login", function(req, res) {
+    res.render("login", { user: req.user });
+});
+
+app.get("/logout", function(req, res){
+    req.logout();
+    res.redirect("/");
+});
+
+app.get("/edit/:id", ensureAuthenticated, users.isAdmin, function (req, res) {
     var id = req.params.id.trim();
     if (!res.locals.user.admin) {
         res.redirect("/view/" + id);
@@ -82,11 +171,11 @@ app.get("/edit/:id", users.isAdmin, function (req, res) {
 
 });
 
-app.get("/upload", function (req, res) {
+app.get("/upload", ensureAuthenticated, function (req, res) {
     res.render("upload");
 });
 
-app.get("/view/:id", users.isAdmin, function (req, res) {
+app.get("/view/:id", ensureAuthenticated, users.isAdmin, function (req, res) {
     var id = req.params.id.trim();
     if (id && id != "") {
         dataService.findById(id)
@@ -104,7 +193,7 @@ app.get("/view/:id", users.isAdmin, function (req, res) {
 });
 
 // If you are `searching` for no tags then redirect to home
-app.get(/^\/tag\/?$/, function (req, res) {
+app.get(/^\/tag\/?$/, ensureAuthenticated, function (req, res) {
     res.redirect('/');
 });
 
@@ -150,7 +239,7 @@ app.get(/\/tag\/([- _a-z%A-Z0-9\/]*)\/?$/, function (req, res) {
 
 
 //API endpoints - should really use 'put' and 'delete' http methods but not supported by html forms.
-app.post("/create", function (req, res) {
+app.post("/create", ensureAuthenticated, function (req, res) {
 
     // validation
     function validateReq(req) {
@@ -248,7 +337,7 @@ app.post("/create", function (req, res) {
 
 });
 
-app.post("/update/:id", users.isAdmin, function (req, res) {
+app.post("/update/:id", ensureAuthenticated, users.isAdmin, function (req, res) {
     var id = req.params.id.trim();
     if (!res.locals.user.admin) {
         res.redirect("/view/" + id);
@@ -332,7 +421,7 @@ app.post("/update/:id", users.isAdmin, function (req, res) {
 
 });
 
-app.get("/delete/:id", users.isAdmin, function (req, res) {
+app.get("/delete/:id", ensureAuthenticated, users.isAdmin, function (req, res) {
     var id = req.params.id.trim();
     if (!res.locals.user.admin) {
         res.redirect("/view/" + id);
@@ -350,7 +439,7 @@ app.get("/delete/:id", users.isAdmin, function (req, res) {
         });
 });
 
-app.get("/sync", function(req, res) {
+app.get("/sync", ensureAuthenticated, function(req, res) {
     res.render("sync");
 });
 
@@ -358,7 +447,7 @@ app.get("/sync/client", function (req, res) {
     res.render("client");
 });
 
-app.get("/sync/server", function (req, res) {
+app.get("/sync/server", ensureAuthenticated, function (req, res) {
     res.render("server");
 });
 

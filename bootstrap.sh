@@ -22,9 +22,4 @@ cat <<EOF > docker-compose.yml
 ${docker_compose_file}
 EOF
 
-# Create oauth2_proxy.cfg file
-cat <<EOF > oauth2_proxy.cfg
-${oauth2_proxy_config_file}
-EOF
-
 /usr/local/bin/docker-compose up -d --build

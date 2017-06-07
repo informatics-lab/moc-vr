@@ -3,7 +3,6 @@ data "template_file" "bootstrap" {
 
   vars = {
     docker_compose_file       = "${file("./docker-compose.yml")}"
-    oauth2_proxy_config_file  = "${file("./oauth2_proxy.cfg")}"
     credentials_file          = "${file("./credentials.sh")}"
   }
 }
