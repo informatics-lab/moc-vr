@@ -39,13 +39,13 @@ passport.use(new GitHubStrategy({
         clientID: process.env.MOC_VR_OAUTH_CLIENT_ID,
         clientSecret: process.env.MOC_VR_OAUTH_CLIENT_SECRET,
         callbackURL: "http://" + process.env.DOMAIN + "/auth/github/callback",
-        scope: 'user:email'
+        scope: "user:email"
     },
     function(accessToken, refreshToken, profile, done) {
         // asynchronous verification, for effect...
         process.nextTick(function () {
 
-            var domains = profile.emails.map(x => x.value.split('@')[1])
+            var domains = profile.emails.map(x => x.value.split("@")[1])
             function isValidDomain(element, index, array) {
                 return domainWhitelist.includes(element);
             }
