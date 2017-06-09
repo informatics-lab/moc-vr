@@ -13,7 +13,8 @@ var dataService = require("./mocvr-data-service");
 var users = require("./users");
 var passport = require("passport");
 var session = require("express-session");
-var GitHubStrategy = require("passport-github2").Strategy;
+var GitHubStrategy = require("passport-github").Strategy;
+var domainWhitelist = ["informaticslab.co.uk", "metoffice.gov.uk"];
 
 // Passport session setup.
 //   To support persistent login sessions, Passport needs to be able to
@@ -37,17 +38,23 @@ passport.deserializeUser(function(obj, done) {
 passport.use(new GitHubStrategy({
         clientID: process.env.MOC_VR_OAUTH_CLIENT_ID,
         clientSecret: process.env.MOC_VR_OAUTH_CLIENT_SECRET,
-        callbackURL: "http://" + process.env.DOMAIN + "/auth/github/callback"
+        callbackURL: "http://" + process.env.DOMAIN + "/auth/github/callback",
+        scope: 'user:email'
     },
     function(accessToken, refreshToken, profile, done) {
         // asynchronous verification, for effect...
         process.nextTick(function () {
 
-            // To keep the example simple, the user's GitHub profile is returned to
-            // represent the logged-in user.  In a typical application, you could
-            // associate the GitHub account with a user record in your database,
-            // and return that user instead.
-            return done(null, profile);
+            var domains = profile.emails.map(x => x.value.split('@')[1])
+            function isValidDomain(element, index, array) {
+                return domainWhitelist.includes(element);
+            }
+            if(domains.some(isValidDomain)) {
+                return done(null, profile);
+            } else {
+                return done(new Error("Invalid user domain"));
+            }
+
         });
     }
 ));
