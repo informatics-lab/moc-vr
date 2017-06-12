@@ -13,7 +13,7 @@
     "fs-extra": "^0.22.1",
     "node-uuid": "^1.4.7",
     "passport": "^0.3.2",
-    "passport-github2": "^0.1.10",
+    "passport-github": "^1.1.0",
     "socket.io": "^2.0.1",
     "streamifier": "^0.1.1"
   },

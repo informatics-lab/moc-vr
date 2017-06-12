@@ -16,6 +16,10 @@ resource "aws_instance" "moc-vr" {
 
   tags {
     Name        = "moc-vr"
+    Owner       = "tompowell"
+    EndOfLife   = "2018-01-01"
+    Project     = "moc-vr"
+    OfficeHours = "false"
   }
 }
 
