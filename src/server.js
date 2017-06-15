@@ -446,7 +446,7 @@ app.get("/delete/:id", ensureAuthenticated, users.isAdmin, function (req, res) {
         });
 });
 
-app.get("/sync", ensureAuthenticated, function(req, res) {
+app.get("/sync", function(req, res) {
     res.render("sync");
 });
 
