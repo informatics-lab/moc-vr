@@ -28,7 +28,7 @@ function currentPhotosphere() {
 function displayPhotosphere(msg) {
 
     // Don't update it already looking at the correct photosphere.
-    if (currentPhotosphere() === msg.id) {
+    if (msg.id && currentPhotosphere() === msg.id) {
         return;
     }
     console.log("new photosphere served", msg);
