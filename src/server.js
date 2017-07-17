@@ -163,7 +163,7 @@ app.get("/edit/:id", ensureAuthenticated, users.isAdmin, function (req, res) {
             var model =   toModel(response, res);
             var result = response.Items[0];
             model.photosphere_original = result.photosphere.S;
-            if(result.lidar.S) {
+            if(result.lidar && result.lidar.S) {
                 model.lidar_original = result.lidar.S;
             }
             return model;
