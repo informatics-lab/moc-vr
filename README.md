@@ -62,6 +62,17 @@ To redeploy the service on the same infrastructure (this should not be required 
  * run `docker-compose down` to stop and remove the current app containers.  
  * run `docker-compose up -d --build` to spin up the updated containers.  
 
+# Current Application Architecture
+
+### Auth
+ * Github OAuth2.0
+
+### AWS Services
+ * EC2 instance - runs docker with node.js application deployed as single docker container.
+ * S3 bucket - stores images.
+ * Lambda - triggered by image uploads, produces muli-resolution images for use in the app.
+ * DynamoDB - stores weather obs.
+
 # Credits
 Used to handle multipart uploads  
 https://github.com/richardgirges/express-fileupload
