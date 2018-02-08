@@ -14,7 +14,7 @@ var users = require("./users");
 var passport = require("passport");
 var session = require("express-session");
 var GitHubStrategy = require("passport-github").Strategy;
-var domainWhitelist = ["informaticslab.co.uk", "metoffice.gov.uk"];
+var domainWhitelist = ["informaticslab.co.uk", "metoffice.gov.uk", "weathersa.co.za"];
 
 // Passport session setup.
 //   To support persistent login sessions, Passport needs to be able to
